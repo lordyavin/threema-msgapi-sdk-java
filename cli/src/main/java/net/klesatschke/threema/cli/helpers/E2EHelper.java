@@ -46,8 +46,6 @@ import net.klesatschke.threema.api.exceptions.NotAllowedException;
 import net.klesatschke.threema.api.messages.FileMessage;
 import net.klesatschke.threema.api.messages.ImageMessage;
 import net.klesatschke.threema.api.messages.ThreemaMessage;
-import net.klesatschke.threema.api.results.CapabilityResult;
-import net.klesatschke.threema.api.results.EncryptResult;
 import net.klesatschke.threema.api.results.UploadResult;
 
 /** Helper to handle Threema end-to-end encryption. */
@@ -284,8 +282,7 @@ public class E2EHelper {
     } else if (message instanceof FileMessage fileMessage) {
       var fileData = this.apiConnector.downloadFile(fileMessage.getBlobId());
 
-      var decryptedFileData =
-          CryptTool.decryptFileData(fileData, fileMessage.getEncryptionKey());
+      var decryptedFileData = CryptTool.decryptFileData(fileData, fileMessage.getEncryptionKey());
       var file =
           new File(outputFolder.toString() + "/" + messageId + "-" + fileMessage.getFileName());
       var fos = new FileOutputStream(file);

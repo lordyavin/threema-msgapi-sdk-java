@@ -6,7 +6,7 @@
 		<version>1.1.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>api</artifactId>
-	<name>Threema Messsge Gateway API</name>
+	<name>Threema Messsage Gateway API</name>
 	<licenses>
 		<license>
 			<name>MIT-License</name>
@@ -15,31 +15,6 @@
 		</license>
 	</licenses>
 	<url>https://github.com/lordyavin/threema-msgapi-sdk-java</url>
-	<properties>
-		<source.encoding>UTF-8</source.encoding>
-		<project.build.sourceEncoding>${source.encoding}</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>${source.encoding}</project.reporting.outputEncoding>
-	</properties>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.10.1</version>
-				<configuration>
-					<encoding>${source.encoding}</encoding>
-					<source>17</source>
-					<target>17</target>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</path>
-					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 	<dependencies>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -66,7 +41,6 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.22</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

@@ -53,7 +53,7 @@ import net.klesatschke.threema.api.results.UploadResult;
 public class CryptTool {
   private static final String HMAC_SHA256 = "HmacSHA256";
 
-private CryptTool() {}
+  private CryptTool() {}
 
   /* HMAC-SHA256 keys for email/mobile phone hashing */
   private static final byte[] EMAIL_HMAC_KEY = {
