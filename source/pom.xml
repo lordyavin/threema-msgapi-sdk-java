@@ -3,7 +3,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>ch.threema.apitool</groupId>
 	<artifactId>msgapi-sdk-java</artifactId>
 	<version>1.1.4</version>
@@ -13,14 +12,11 @@
 		<project.build.sourceEncoding>${source.encoding}</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>${source.encoding}</project.reporting.outputEncoding>
 	</properties>
-
 	<organization>
 		<name>Threema GmbH, Staldenbachstrasse 11, 8808 Pfäffikon SZ, Schweiz</name>
 		<url>https://www.threema.ch</url>
 	</organization>
-
 	<url>https://gateway.threema.ch/</url>
-
 	<licenses>
 		<license>
 			<name>MIT-License</name>
@@ -28,7 +24,6 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -36,7 +31,6 @@
 			<version>4.8.1</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -47,15 +41,12 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.12.0</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-javadoc-plugin</artifactId> 
-			<version>3.3.0</version> </dependency> -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.8.6</version>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -68,7 +59,6 @@
 					<target>11</target>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<!-- Build an executable JAR -->
 				<groupId>org.apache.maven.plugins</groupId>
@@ -110,4 +100,11 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub lordyavin Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/lordyavin/threema-msgapi-sdk-java</url>
+		</repository>
+	</distributionManagement>
 </project>
