@@ -28,62 +28,61 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Stores and caches public keys for Threema users. Extend this class to provide your
- * own storage implementation, e.g. in a file or database.
+ * Stores and caches public keys for Threema users. Extend this class to provide your own storage
+ * implementation, e.g. in a file or database.
  */
 public abstract class PublicKeyStore {
-	private final Map<String, byte[]> cache = new HashMap<>();
+  private final Map<String, byte[]> cache = new HashMap<>();
 
-	/**
-	 * Get the public key for a given Threema ID. The cache is checked first; if it
-	 * is not found in the cache, fetchPublicKey() is called.
-	 *
-	 * @param threemaId The Threema ID whose public key should be obtained
-	 * @return The public key, or null if not found.
-	 */
-	public final byte[] getPublicKey(String threemaId) {
-		synchronized (this.cache) {
-			byte[] pk = this.cache.get(threemaId);
+  /**
+   * Get the public key for a given Threema ID. The cache is checked first; if it is not found in
+   * the cache, fetchPublicKey() is called.
+   *
+   * @param threemaId The Threema ID whose public key should be obtained
+   * @return The public key, or null if not found.
+   */
+  public final byte[] getPublicKey(String threemaId) {
+    synchronized (this.cache) {
+      byte[] pk = this.cache.get(threemaId);
 
-			if (pk == null) {
-				pk = this.fetchPublicKey(threemaId);
-				this.cache.put(threemaId, pk);
-			}
-			return pk;
-		}
+      if (pk == null) {
+        pk = this.fetchPublicKey(threemaId);
+        this.cache.put(threemaId, pk);
+      }
+      return pk;
+    }
+  }
 
-	}
+  /**
+   * Store the public key for a given Threema ID in the cache, and the underlying store.
+   *
+   * @param threemaId The Threema ID whose public key should be stored
+   * @param publicKey The corresponding public key.
+   */
+  public final void setPublicKey(String threemaId, byte[] publicKey) {
+    if (publicKey != null) {
+      synchronized (this.cache) {
+        this.cache.put(threemaId, publicKey);
+        this.save(threemaId, publicKey);
+      }
+    }
+  }
 
-	/**
-	 * Store the public key for a given Threema ID in the cache, and the underlying store.
-	 *
-	 * @param threemaId The Threema ID whose public key should be stored
-	 * @param publicKey The corresponding public key.
-	 */
-	public final void setPublicKey(String threemaId, byte[] publicKey) {
-		if(publicKey != null) {
-			synchronized (this.cache) {
-				this.cache.put(threemaId, publicKey);
-				this.save(threemaId, publicKey);
-			}
-		}
-	}
+  /**
+   * Fetch the public key for the given Threema ID from the store. Override to provide your own
+   * implementation to read from the store.
+   *
+   * @param threemaId The Threema ID whose public key should be obtained
+   * @return The public key, or null if not found.
+   */
+  protected abstract byte[] fetchPublicKey(String threemaId);
 
-	/**
-	 * Fetch the public key for the given Threema ID from the store. Override to provide
-	 * your own implementation to read from the store.
-	 *
-	 * @param threemaId The Threema ID whose public key should be obtained
-	 * @return The public key, or null if not found.
-	 */
-	abstract protected byte[] fetchPublicKey(String threemaId);
-
-	/**
-	 * Save the public key for a given Threema ID in the store. Override to provide
-	 * your own implementation to write to the store.
-	 *
-	 * @param threemaId The Threema ID whose public key should be stored
-	 * @param publicKey The corresponding public key.
-	 */
-	abstract protected void save(String threemaId, byte[] publicKey);
+  /**
+   * Save the public key for a given Threema ID in the store. Override to provide your own
+   * implementation to write to the store.
+   *
+   * @param threemaId The Threema ID whose public key should be stored
+   * @param publicKey The corresponding public key.
+   */
+  protected abstract void save(String threemaId, byte[] publicKey);
 }

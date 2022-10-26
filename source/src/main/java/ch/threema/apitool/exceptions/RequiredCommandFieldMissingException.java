@@ -24,13 +24,11 @@
 
 package ch.threema.apitool.exceptions;
 
-/**
- * Exception that gets thrown on a illegal call.
- */
+/** Exception that gets thrown on a illegal call. */
 public class RequiredCommandFieldMissingException extends Exception {
-    private static final long serialVersionUID = 2273462399743084938L;
+  private static final long serialVersionUID = 2273462399743084938L;
 
-    public RequiredCommandFieldMissingException(String message) {
-        super(message);
-    }
+  public RequiredCommandFieldMissingException(String message) {
+    super(message);
+  }
 }

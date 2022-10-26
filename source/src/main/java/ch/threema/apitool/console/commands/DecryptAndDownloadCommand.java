@@ -31,43 +31,44 @@ import ch.threema.apitool.helpers.E2EHelper;
 import java.nio.file.Path;
 
 public class DecryptAndDownloadCommand extends Command {
-	private final ThreemaIDField threemaId;
-	private final ThreemaIDField fromField;
-	private final TextField secretField;
-	private final PrivateKeyField privateKeyField;
-	private final ByteArrayField nonceField;
-	private final FolderField outputFolderField;
-	private final TextField messageIdField;
+  private final ThreemaIDField threemaId;
+  private final ThreemaIDField fromField;
+  private final TextField secretField;
+  private final PrivateKeyField privateKeyField;
+  private final ByteArrayField nonceField;
+  private final FolderField outputFolderField;
+  private final TextField messageIdField;
 
-	public DecryptAndDownloadCommand() {
-		super("Decrypt and download",
-				"Decrypt a box (box from the stdin) message and download (if the message is a image or file message) the file(s) to the defined directory"
-		);
-		this.threemaId = this.createThreemaId("id");
-		this.fromField = this.createThreemaId("from");
-		this.secretField = this.createTextField("secret");
-		this.privateKeyField = this.createPrivateKeyField("privateKey");
-		this.messageIdField = this.createTextField("messageId");
-		this.nonceField = this.createByteArrayField("nonce");
-		this.outputFolderField = this.createFolderField("outputFolder", false);
-	}
+  public DecryptAndDownloadCommand() {
+    super(
+        "Decrypt and download",
+        "Decrypt a box (box from the stdin) message and download (if the message is a image or file message) the file(s) to the defined directory");
+    this.threemaId = this.createThreemaId("id");
+    this.fromField = this.createThreemaId("from");
+    this.secretField = this.createTextField("secret");
+    this.privateKeyField = this.createPrivateKeyField("privateKey");
+    this.messageIdField = this.createTextField("messageId");
+    this.nonceField = this.createByteArrayField("nonce");
+    this.outputFolderField = this.createFolderField("outputFolder", false);
+  }
 
-	@Override
-	protected void execute() throws Exception {
-		String id = this.threemaId.getValue();
-		String from = this.fromField.getValue();
-		String secret = this.secretField.getValue();
-		byte[] privateKey = this.privateKeyField.getValue();
-		byte[] nonce = this.nonceField.getValue();
-		String messageId = this.messageIdField.getValue();
-		Path outputFolder = this.outputFolderField.getValue();
+  @Override
+  protected void execute() throws Exception {
+    String id = this.threemaId.getValue();
+    String from = this.fromField.getValue();
+    String secret = this.secretField.getValue();
+    byte[] privateKey = this.privateKeyField.getValue();
+    byte[] nonce = this.nonceField.getValue();
+    String messageId = this.messageIdField.getValue();
+    Path outputFolder = this.outputFolderField.getValue();
 
-		E2EHelper e2EHelper = new E2EHelper(this.createConnector(from, secret), privateKey);
+    E2EHelper e2EHelper = new E2EHelper(this.createConnector(from, secret), privateKey);
 
-		byte[] box = DataUtils.hexStringToByteArray(this.readStream(System.in, "UTF-8").trim());
+    byte[] box = DataUtils.hexStringToByteArray(this.readStream(System.in, "UTF-8").trim());
 
-		E2EHelper.ReceiveMessageResult res = e2EHelper.receiveMessage(id, messageId, box, nonce, outputFolder);
-		System.out.println(res.toString());
-		System.out.println(res.getFiles().toString());
-	}
+    E2EHelper.ReceiveMessageResult res =
+        e2EHelper.receiveMessage(id, messageId, box, nonce, outputFolder);
+    System.out.println(res.toString());
+    System.out.println(res.getFiles().toString());
+  }
 }

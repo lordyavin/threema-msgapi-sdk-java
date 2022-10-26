@@ -28,60 +28,54 @@ import ch.threema.apitool.DataUtils;
 import com.neilalexander.jnacl.NaCl;
 import org.apache.commons.io.EndianUtils;
 
-/**
- * An image message that can be sent/received with end-to-end encryption via Threema.
- */
+/** An image message that can be sent/received with end-to-end encryption via Threema. */
 public class ImageMessage extends ThreemaMessage {
 
-	public static final int TYPE_CODE = 0x02;
-	private final byte[] blobId;
-	private final int size;
-	private final byte[] nonce;
+  public static final int TYPE_CODE = 0x02;
+  private final byte[] blobId;
+  private final int size;
+  private final byte[] nonce;
 
+  public ImageMessage(byte[] blobId, int size, byte[] nonce) {
 
-	public ImageMessage(byte[] blobId, int size, byte[] nonce) {
+    this.blobId = blobId;
+    this.size = size;
+    this.nonce = nonce;
+  }
 
-		this.blobId = blobId;
-		this.size = size;
-		this.nonce = nonce;
-	}
+  public byte[] getBlobId() {
+    return this.blobId;
+  }
 
-	public byte[] getBlobId() {
-		return this.blobId;
-	}
+  public int getSize() {
+    return this.size;
+  }
 
+  public byte[] getNonce() {
+    return this.nonce;
+  }
 
-	public int getSize() {
-		return this.size;
-	}
+  @Override
+  public int getTypeCode() {
+    return TYPE_CODE;
+  }
 
+  @Override
+  public String toString() {
+    return "blob " + DataUtils.byteArrayToHexString(this.blobId);
+  }
 
-	public byte[] getNonce() {
-		return this.nonce;
-	}
+  @Override
+  public byte[] getData() {
+    byte[] data = new byte[BLOB_ID_LEN + 4 + NaCl.NONCEBYTES];
+    int pos = 0;
+    System.arraycopy(this.blobId, 0, data, pos, BLOB_ID_LEN);
+    pos += BLOB_ID_LEN;
 
-	@Override
-	public int getTypeCode() {
-		return TYPE_CODE;
-	}
+    EndianUtils.writeSwappedInteger(data, pos, this.size);
+    pos += 4;
 
-	@Override
-	public String toString() {
-		return "blob " + DataUtils.byteArrayToHexString(this.blobId);
-	}
-
-	@Override
-	public byte[] getData() {
-		byte[] data = new byte[BLOB_ID_LEN + 4 + NaCl.NONCEBYTES];
-		int pos = 0;
-		System.arraycopy(this.blobId, 0, data, pos, BLOB_ID_LEN);
-		pos += BLOB_ID_LEN;
-
-		EndianUtils.writeSwappedInteger(data, pos, this.size);
-		pos += 4;
-
-		System.arraycopy(this.nonce, 0, data, pos,  NaCl.NONCEBYTES);
-		return data;
-
-	}
+    System.arraycopy(this.nonce, 0, data, pos, NaCl.NONCEBYTES);
+    return data;
+  }
 }

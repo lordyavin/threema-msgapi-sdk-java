@@ -24,83 +24,69 @@
 
 package ch.threema.apitool.results;
 
-/**
- * Result of a capability lookup
- */
+/** Result of a capability lookup */
 public class CapabilityResult {
-	private final String key;
-	private final String[] capabilities;
+  private final String key;
+  private final String[] capabilities;
 
-	public CapabilityResult(String key, String[] capabilities) {
-		this.key = key;
-		this.capabilities = capabilities;
-	}
+  public CapabilityResult(String key, String[] capabilities) {
+    this.key = key;
+    this.capabilities = capabilities;
+  }
 
-	/**
-	 * Get all capabilities as a string array.
-	 */
-	public String[] getCapabilities() {
-		return capabilities;
-	}
+  /** Get all capabilities as a string array. */
+  public String[] getCapabilities() {
+    return capabilities;
+  }
 
-	/**
-	 * Check whether the Threema ID can receive text
-	 */
-	public boolean canText() {
-		return this.can("text");
-	}
+  /** Check whether the Threema ID can receive text */
+  public boolean canText() {
+    return this.can("text");
+  }
 
-	/**
-	 * Check whether the Threema ID can receive images
-	 */
-	public boolean canImage() {
-		return this.can("image");
-	}
+  /** Check whether the Threema ID can receive images */
+  public boolean canImage() {
+    return this.can("image");
+  }
 
-	/**
-	 * Check whether the Threema ID can receive videos
-	 */
-	public boolean canVideo() {
-		return this.can("video");
-	}
+  /** Check whether the Threema ID can receive videos */
+  public boolean canVideo() {
+    return this.can("video");
+  }
 
-	/**
-	 * Check whether the Threema ID can receive audio
-	 */
-	public boolean canAudio() {
-		return this.can("audio");
-	}
+  /** Check whether the Threema ID can receive audio */
+  public boolean canAudio() {
+    return this.can("audio");
+  }
 
-	/**
-	 * Check whether the Threema ID can receive files
-	 */
-	public boolean canFile() {
-		return this.can("file");
-	}
+  /** Check whether the Threema ID can receive files */
+  public boolean canFile() {
+    return this.can("file");
+  }
 
-	private boolean can(String key) {
-		for(String k: this.capabilities) {
-			if(k.equals(key)) {
-				return true;
-			}
-		}
-		return false;
-	}
+  private boolean can(String key) {
+    for (String k : this.capabilities) {
+      if (k.equals(key)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder b = new StringBuilder();
-		b.append(this.key).append(": ");
-		for(int n = 0; n < this.capabilities.length; n++) {
-			if(n > 0) {
-				b.append(",");
-			}
-			b.append(this.capabilities[n]);
-		}
-		return b.toString();
-	}
+  @Override
+  public String toString() {
+    StringBuilder b = new StringBuilder();
+    b.append(this.key).append(": ");
+    for (int n = 0; n < this.capabilities.length; n++) {
+      if (n > 0) {
+        b.append(",");
+      }
+      b.append(this.capabilities[n]);
+    }
+    return b.toString();
+  }
 
-	public String getKey() {
-		return key;
-	}
+  public String getKey() {
+    return key;
+  }
 }

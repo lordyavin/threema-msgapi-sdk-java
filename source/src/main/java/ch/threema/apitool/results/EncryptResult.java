@@ -24,45 +24,35 @@
 
 package ch.threema.apitool.results;
 
-/**
- * Result of a data encryption
- */
+/** Result of a data encryption */
 public class EncryptResult {
-	private final byte[] result;
-	private final byte[] secret;
-	private final byte[] nonce;
+  private final byte[] result;
+  private final byte[] secret;
+  private final byte[] nonce;
 
-	public EncryptResult(byte[] result, byte[] secret, byte[] nonce) {
-		this.result = result;
-		this.secret = secret;
-		this.nonce = nonce;
-	}
+  public EncryptResult(byte[] result, byte[] secret, byte[] nonce) {
+    this.result = result;
+    this.secret = secret;
+    this.nonce = nonce;
+  }
 
-	/**
-	 * @return the encrypted data
-	 */
-	public byte[] getResult() {
-		return this.result;
-	}
+  /** @return the encrypted data */
+  public byte[] getResult() {
+    return this.result;
+  }
 
-	/**
-	 * @return the size (in bytes) of the encrypted data
-	 */
-	public int getSize() {
-		return this.result.length;
-	}
+  /** @return the size (in bytes) of the encrypted data */
+  public int getSize() {
+    return this.result.length;
+  }
 
-	/**
-	 * @return the nonce that was used for encryption
-	 */
-	public byte[] getNonce() {
-		return this.nonce;
-	}
+  /** @return the nonce that was used for encryption */
+  public byte[] getNonce() {
+    return this.nonce;
+  }
 
-	/**
-	 * @return the secret that was used for encryption (only for symmetric encryption, e.g. files)
-	 */
-	public byte[] getSecret() {
-		return secret;
-	}
+  /** @return the secret that was used for encryption (only for symmetric encryption, e.g. files) */
+  public byte[] getSecret() {
+    return secret;
+  }
 }

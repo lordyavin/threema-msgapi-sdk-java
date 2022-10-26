@@ -33,33 +33,34 @@ import ch.threema.apitool.helpers.E2EHelper;
 import java.nio.file.Path;
 
 public class SendE2EImageMessageCommand extends Command {
-	private final ThreemaIDField toField;
-	private final ThreemaIDField fromField;
-	private final TextField secretField;
-	private final PrivateKeyField privateKeyField;
-	private final FolderField imageFilePath;
+  private final ThreemaIDField toField;
+  private final ThreemaIDField fromField;
+  private final TextField secretField;
+  private final PrivateKeyField privateKeyField;
+  private final FolderField imageFilePath;
 
-	public SendE2EImageMessageCommand() {
-		super("Send End-to-End Encrypted Image Message",
-				"Encrypt standard input and send the message to the given ID. 'from' is the API identity and 'secret' is the API secret. Prints the message ID on success.");
+  public SendE2EImageMessageCommand() {
+    super(
+        "Send End-to-End Encrypted Image Message",
+        "Encrypt standard input and send the message to the given ID. 'from' is the API identity and 'secret' is the API secret. Prints the message ID on success.");
 
-		this.toField = this.createThreemaId("to", true);
-		this.fromField = this.createThreemaId("from", true);
-		this.secretField = this.createTextField("secret", true);
-		this.privateKeyField = this.createPrivateKeyField("privateKey", true);
-		this.imageFilePath = this.createFolderField("imageFilePath", true);
-	}
+    this.toField = this.createThreemaId("to", true);
+    this.fromField = this.createThreemaId("from", true);
+    this.secretField = this.createTextField("secret", true);
+    this.privateKeyField = this.createPrivateKeyField("privateKey", true);
+    this.imageFilePath = this.createFolderField("imageFilePath", true);
+  }
 
-	@Override
-	protected void execute() throws Exception {
-		String to = this.toField.getValue();
-		String from = this.fromField.getValue();
-		String secret = this.secretField.getValue();
-		byte[] privateKey = this.privateKeyField.getValue();
-		Path imageFilePath = this.imageFilePath.getValue();
+  @Override
+  protected void execute() throws Exception {
+    String to = this.toField.getValue();
+    String from = this.fromField.getValue();
+    String secret = this.secretField.getValue();
+    byte[] privateKey = this.privateKeyField.getValue();
+    Path imageFilePath = this.imageFilePath.getValue();
 
-		E2EHelper e2EHelper = new E2EHelper(this.createConnector(from, secret), privateKey);
-		String messageId = e2EHelper.sendImageMessage(to, imageFilePath.toString());
-		System.out.println("MessageId: " + messageId);
-	}
+    E2EHelper e2EHelper = new E2EHelper(this.createConnector(from, secret), privateKey);
+    String messageId = e2EHelper.sendImageMessage(to, imageFilePath.toString());
+    System.out.println("MessageId: " + messageId);
+  }
 }

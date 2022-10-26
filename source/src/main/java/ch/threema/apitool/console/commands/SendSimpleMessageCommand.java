@@ -29,29 +29,30 @@ import ch.threema.apitool.console.commands.fields.TextField;
 import ch.threema.apitool.console.commands.fields.ThreemaIDField;
 
 public class SendSimpleMessageCommand extends Command {
-	private final ThreemaIDField threemaId;
-	private final ThreemaIDField fromField;
-	private final TextField secretField;
+  private final ThreemaIDField threemaId;
+  private final ThreemaIDField fromField;
+  private final TextField secretField;
 
-	public SendSimpleMessageCommand() {
-		super("Send Simple Message",
-				"Send a message from standard input with server-side encryption to the given ID. 'from' is the API identity and 'secret' is the API secret. Returns the message ID on success.");
+  public SendSimpleMessageCommand() {
+    super(
+        "Send Simple Message",
+        "Send a message from standard input with server-side encryption to the given ID. 'from' is the API identity and 'secret' is the API secret. Returns the message ID on success.");
 
-		this.threemaId = this.createThreemaId("to");
-		this.fromField = this.createThreemaId("from");
-		this.secretField = this.createTextField("secret");
-	}
+    this.threemaId = this.createThreemaId("to");
+    this.fromField = this.createThreemaId("from");
+    this.secretField = this.createTextField("secret");
+  }
 
-	@Override
-	protected void execute() throws Exception {
-		String to = this.threemaId.getValue();
-		String from = this.fromField.getValue();
-		String secret = this.secretField.getValue();
+  @Override
+  protected void execute() throws Exception {
+    String to = this.threemaId.getValue();
+    String from = this.fromField.getValue();
+    String secret = this.secretField.getValue();
 
-		String text = readStream(System.in, "UTF-8").trim();
+    String text = readStream(System.in, "UTF-8").trim();
 
-		APIConnector apiConnector = this.createConnector(from, secret);
-		String messageId = apiConnector.sendTextMessageSimple(to, text);
-		System.out.println(messageId);
-	}
+    APIConnector apiConnector = this.createConnector(from, secret);
+    String messageId = apiConnector.sendTextMessageSimple(to, text);
+    System.out.println(messageId);
+  }
 }

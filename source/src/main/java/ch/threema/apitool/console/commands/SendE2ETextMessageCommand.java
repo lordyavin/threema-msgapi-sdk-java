@@ -30,31 +30,32 @@ import ch.threema.apitool.console.commands.fields.ThreemaIDField;
 import ch.threema.apitool.helpers.E2EHelper;
 
 public class SendE2ETextMessageCommand extends Command {
-	private final ThreemaIDField threemaId;
-	private final ThreemaIDField fromField;
-	private final TextField secretField;
-	private final PrivateKeyField privateKeyField;
+  private final ThreemaIDField threemaId;
+  private final ThreemaIDField fromField;
+  private final TextField secretField;
+  private final PrivateKeyField privateKeyField;
 
-	public SendE2ETextMessageCommand() {
-		super("Send End-to-End Encrypted Text Message",
-				"Encrypt standard input and send the message to the given ID. 'from' is the API identity and 'secret' is the API secret. Prints the message ID on success.");
-		this.threemaId = this.createThreemaId("to");
-		this.fromField = this.createThreemaId("from");
-		this.secretField = this.createTextField("secret");
-		this.privateKeyField = this.createPrivateKeyField("privateKey");
-	}
+  public SendE2ETextMessageCommand() {
+    super(
+        "Send End-to-End Encrypted Text Message",
+        "Encrypt standard input and send the message to the given ID. 'from' is the API identity and 'secret' is the API secret. Prints the message ID on success.");
+    this.threemaId = this.createThreemaId("to");
+    this.fromField = this.createThreemaId("from");
+    this.secretField = this.createTextField("secret");
+    this.privateKeyField = this.createPrivateKeyField("privateKey");
+  }
 
-	@Override
-	protected void execute() throws Exception {
-		String to = this.threemaId.getValue();
-		String from = this.fromField.getValue();
-		String secret = this.secretField.getValue();
-		byte[] privateKey = this.privateKeyField.getValue();
+  @Override
+  protected void execute() throws Exception {
+    String to = this.threemaId.getValue();
+    String from = this.fromField.getValue();
+    String secret = this.secretField.getValue();
+    byte[] privateKey = this.privateKeyField.getValue();
 
-		String text = this.readStream(System.in, "UTF-8").trim();
+    String text = this.readStream(System.in, "UTF-8").trim();
 
-		E2EHelper e2EHelper = new E2EHelper(this.createConnector(from, secret), privateKey);
-		String messageId = e2EHelper.sendTextMessage(to, text);
-		System.out.println("MessageId: " + messageId);
-	}
+    E2EHelper e2EHelper = new E2EHelper(this.createConnector(from, secret), privateKey);
+    String messageId = e2EHelper.sendTextMessage(to, text);
+    System.out.println("MessageId: " + messageId);
+  }
 }

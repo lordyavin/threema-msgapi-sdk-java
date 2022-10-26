@@ -25,9 +25,10 @@
 package ch.threema.apitool.exceptions;
 
 /**
- * Exception that gets thrown when decryption fails (because the keys are incorrect, or the data is corrupted).
+ * Exception that gets thrown when decryption fails (because the keys are incorrect, or the data is
+ * corrupted).
  */
 public class DecryptionFailedException extends MessageParseException {
 
-    private static final long serialVersionUID = 2523453399446307538L;
+  private static final long serialVersionUID = 2523453399446307538L;
 }

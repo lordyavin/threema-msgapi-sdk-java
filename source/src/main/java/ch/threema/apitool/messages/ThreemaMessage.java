@@ -26,20 +26,14 @@ package ch.threema.apitool.messages;
 
 import ch.threema.apitool.exceptions.BadMessageException;
 
-/**
- * Abstract base class of messages that can be sent with end-to-end encryption via Threema.
- */
+/** Abstract base class of messages that can be sent with end-to-end encryption via Threema. */
 public abstract class ThreemaMessage {
 
-	public static final int BLOB_ID_LEN = 16;
+  public static final int BLOB_ID_LEN = 16;
 
-	/**
-	 * @return The message's raw content
-	 */
-	public abstract byte[] getData() throws BadMessageException;
+  /** @return The message's raw content */
+  public abstract byte[] getData() throws BadMessageException;
 
-	/**
-	 * @return the message's type code
-	 */
-	public abstract int getTypeCode();
+  /** @return the message's type code */
+  public abstract int getTypeCode();
 }

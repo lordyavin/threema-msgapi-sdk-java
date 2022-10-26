@@ -28,15 +28,15 @@ import ch.threema.apitool.Key;
 import ch.threema.apitool.exceptions.InvalidKeyException;
 
 public class PrivateKeyField extends KeyField {
-	public PrivateKeyField(String key, boolean required) {
-		super(key, required);
-	}
+  public PrivateKeyField(String key, boolean required) {
+    super(key, required);
+  }
 
-	public byte[] getValue() throws InvalidKeyException {
-		try {
-			return this.readKey(this.value, Key.KeyType.PRIVATE);
-		} catch (Exception e) {
-			throw new InvalidKeyException("invalid private key");
-		}
-	}
+  public byte[] getValue() throws InvalidKeyException {
+    try {
+      return this.readKey(this.value, Key.KeyType.PRIVATE);
+    } catch (Exception e) {
+      throw new InvalidKeyException("invalid private key");
+    }
+  }
 }

@@ -28,28 +28,28 @@ import ch.threema.apitool.console.commands.fields.TextField;
 import ch.threema.apitool.console.commands.fields.ThreemaIDField;
 
 public class CreditsCommand extends Command {
-    private final ThreemaIDField fromField;
-    private final TextField secretField;
+  private final ThreemaIDField fromField;
+  private final TextField secretField;
 
-    public CreditsCommand() {
-        super("Credits", "Fetch the remaining credits");
+  public CreditsCommand() {
+    super("Credits", "Fetch the remaining credits");
 
-        this.fromField = this.createThreemaId("from");
-        this.secretField = this.createTextField("secret");
+    this.fromField = this.createThreemaId("from");
+    this.secretField = this.createTextField("secret");
+  }
+
+  @Override
+  protected void execute() throws Exception {
+    String from = this.fromField.getValue();
+    String secret = this.secretField.getValue();
+
+    Integer credits = this.createConnector(from, secret).lookupCredits();
+
+    if (credits != null) {
+      System.out.println("Remaining credits: " + credits);
+    } else {
+      System.out.println("Error fetching credits");
+      ;
     }
-
-    @Override
-    protected void execute() throws Exception {
-        String from = this.fromField.getValue();
-        String secret = this.secretField.getValue();
-
-        Integer credits = this.createConnector(from, secret).lookupCredits();
-
-        if (credits != null) {
-            System.out.println("Remaining credits: " + credits);
-        } else {
-            System.out.println("Error fetching credits");
-            ;
-        }
-    }
+  }
 }

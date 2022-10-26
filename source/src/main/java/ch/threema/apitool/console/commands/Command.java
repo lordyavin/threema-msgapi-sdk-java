@@ -32,168 +32,172 @@ import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 
-abstract public class Command {
-	private final List<Field> fields = new LinkedList<>();
-	private final String subject;
-	private final String description;
+public abstract class Command {
+  private final List<Field> fields = new LinkedList<>();
+  private final String subject;
+  private final String description;
 
-	public Command(String subject, String description) {
-		this.subject = subject;
-		this.description = description;
-	}
+  public Command(String subject, String description) {
+    this.subject = subject;
+    this.description = description;
+  }
 
-	private void addField(Field f) {
-		if(f.isRequired()) {
-			int pos = this.fields.size();
-			//add after last required
-			for(int n = 0; n < this.fields.size(); n++) {
-				if(!this.fields.get(n).isRequired()) {
-					pos = n;
-					break;
-				}
-			}
-			this.fields.add(pos, f);
-		}
-		else {
-			this.fields.add(f);
-		}
-	}
-	protected TextField createTextField(String key) {
-		return this.createTextField(key, true);
-	}
-	protected TextField createTextField(String key, boolean required) {
-		TextField field = new TextField(key, required);
-		this.addField(field);
-		return field;
-	}
+  private void addField(Field f) {
+    if (f.isRequired()) {
+      int pos = this.fields.size();
+      // add after last required
+      for (int n = 0; n < this.fields.size(); n++) {
+        if (!this.fields.get(n).isRequired()) {
+          pos = n;
+          break;
+        }
+      }
+      this.fields.add(pos, f);
+    } else {
+      this.fields.add(f);
+    }
+  }
 
-	protected ThreemaIDField createThreemaId(String key) {
-		return this.createThreemaId(key, true);
-	}
+  protected TextField createTextField(String key) {
+    return this.createTextField(key, true);
+  }
 
-	protected ThreemaIDField createThreemaId(String key, boolean required) {
-		ThreemaIDField field = new ThreemaIDField(key, required);
-		this.addField(field);
-		return field;
-	}
+  protected TextField createTextField(String key, boolean required) {
+    TextField field = new TextField(key, required);
+    this.addField(field);
+    return field;
+  }
 
-	protected PublicKeyField createPublicKeyField(String key) {
-		return this.createPublicKeyField(key, true);
-	}
+  protected ThreemaIDField createThreemaId(String key) {
+    return this.createThreemaId(key, true);
+  }
 
-	protected PublicKeyField createPublicKeyField(String key, boolean required) {
-		PublicKeyField field = new PublicKeyField(key, required);
-		this.addField(field);
-		return field;
-	}
+  protected ThreemaIDField createThreemaId(String key, boolean required) {
+    ThreemaIDField field = new ThreemaIDField(key, required);
+    this.addField(field);
+    return field;
+  }
 
-	protected PrivateKeyField createPrivateKeyField(String key) {
-		return this.createPrivateKeyField(key, true);
-	}
+  protected PublicKeyField createPublicKeyField(String key) {
+    return this.createPublicKeyField(key, true);
+  }
 
-	protected PrivateKeyField createPrivateKeyField(String key, boolean required) {
-		PrivateKeyField field = new PrivateKeyField(key, required);
-		this.addField(field);
-		return field;
-	}
+  protected PublicKeyField createPublicKeyField(String key, boolean required) {
+    PublicKeyField field = new PublicKeyField(key, required);
+    this.addField(field);
+    return field;
+  }
 
-	protected FileField createFileField(String key) {
-		return this.createFileField(key, true);
-	}
+  protected PrivateKeyField createPrivateKeyField(String key) {
+    return this.createPrivateKeyField(key, true);
+  }
 
-	protected FileField createFileField(String key, boolean required) {
-		FileField field = new FileField(key, required);
-		this.addField(field);
-		return field;
-	}
+  protected PrivateKeyField createPrivateKeyField(String key, boolean required) {
+    PrivateKeyField field = new PrivateKeyField(key, required);
+    this.addField(field);
+    return field;
+  }
 
-	protected FolderField createFolderField(String key) {
-		return this.createFolderField(key, true);
-	}
+  protected FileField createFileField(String key) {
+    return this.createFileField(key, true);
+  }
 
-	protected FolderField createFolderField(String key, boolean required) {
-		FolderField field = new FolderField(key, required);
-		this.addField(field);
-		return field;
-	}
+  protected FileField createFileField(String key, boolean required) {
+    FileField field = new FileField(key, required);
+    this.addField(field);
+    return field;
+  }
 
-	protected ByteArrayField createByteArrayField(String key) {
-		return this.createByteArrayField(key, true);
-	}
+  protected FolderField createFolderField(String key) {
+    return this.createFolderField(key, true);
+  }
 
-	protected ByteArrayField createByteArrayField(String key, boolean required) {
-		ByteArrayField field = new ByteArrayField(key, required);
-		this.addField(field);
-		return field;
-	}
+  protected FolderField createFolderField(String key, boolean required) {
+    FolderField field = new FolderField(key, required);
+    this.addField(field);
+    return field;
+  }
 
+  protected ByteArrayField createByteArrayField(String key) {
+    return this.createByteArrayField(key, true);
+  }
 
-	protected APIConnector createConnector(String gatewayId, String secret) {
-		return new APIConnector(gatewayId, secret, new PublicKeyStore() {
-			@Override
-			protected byte[] fetchPublicKey(String threemaId) {
-				return null;
-			}
+  protected ByteArrayField createByteArrayField(String key, boolean required) {
+    ByteArrayField field = new ByteArrayField(key, required);
+    this.addField(field);
+    return field;
+  }
 
-			@Override
-			protected void save(String threemaId, byte[] publicKey) {
-				//do nothing
-			}
-		});
-	}
+  protected APIConnector createConnector(String gatewayId, String secret) {
+    return new APIConnector(
+        gatewayId,
+        secret,
+        new PublicKeyStore() {
+          @Override
+          protected byte[] fetchPublicKey(String threemaId) {
+            return null;
+          }
 
-	protected String readStream(InputStream stream, String charset) throws IOException {
-		try {
-			Reader reader = new BufferedReader(new InputStreamReader(stream, charset));
-			StringBuilder builder = new StringBuilder();
-			char[] buffer = new char[8192];
-			int read;
-			while ((read = reader.read(buffer, 0, buffer.length)) > 0) {
-				builder.append(buffer, 0, read);
-			}
-			return builder.toString();
-		} finally {
-			stream.close();
-		}
-	}
+          @Override
+          protected void save(String threemaId, byte[] publicKey) {
+            // do nothing
+          }
+        });
+  }
 
-	public final void run(String[] arguments) throws Exception {
-		int pos = 0;
-		for(Field f: this.fields) {
-			if(arguments.length > pos) {
-				f.setValue(arguments[pos]);
-			}
-			pos++;
-		}
+  protected String readStream(InputStream stream, String charset) throws IOException {
+    try {
+      Reader reader = new BufferedReader(new InputStreamReader(stream, charset));
+      StringBuilder builder = new StringBuilder();
+      char[] buffer = new char[8192];
+      int read;
+      while ((read = reader.read(buffer, 0, buffer.length)) > 0) {
+        builder.append(buffer, 0, read);
+      }
+      return builder.toString();
+    } finally {
+      stream.close();
+    }
+  }
 
-		//validate
-		for(Field f: this.fields) {
-			if(!f.isValid()) {
-				return;
-			}
-		}
+  public final void run(String[] arguments) throws Exception {
+    int pos = 0;
+    for (Field f : this.fields) {
+      if (arguments.length > pos) {
+        f.setValue(arguments[pos]);
+      }
+      pos++;
+    }
 
-		this.execute();
-	}
+    // validate
+    for (Field f : this.fields) {
+      if (!f.isValid()) {
+        return;
+      }
+    }
 
-	public final String getSubject() {
-		return this.subject;
-	}
+    this.execute();
+  }
 
-	public final String getUsageArguments() {
-		StringBuilder usage = new StringBuilder();
-		for(Field f: this.fields) {
-			usage.append(" ")
-					.append(f.isRequired() ? "<" : "[")
-					.append(f.getKey())
-					.append(f.isRequired() ? ">" : "]");
-		}
-		return usage.toString().trim();
-	}
+  public final String getSubject() {
+    return this.subject;
+  }
 
-	public final String getUsageDescription() {
-		return this.description;
-	}
+  public final String getUsageArguments() {
+    StringBuilder usage = new StringBuilder();
+    for (Field f : this.fields) {
+      usage
+          .append(" ")
+          .append(f.isRequired() ? "<" : "[")
+          .append(f.getKey())
+          .append(f.isRequired() ? ">" : "]");
+    }
+    return usage.toString().trim();
+  }
 
-	protected abstract void execute() throws Exception;
+  public final String getUsageDescription() {
+    return this.description;
+  }
+
+  protected abstract void execute() throws Exception;
 }

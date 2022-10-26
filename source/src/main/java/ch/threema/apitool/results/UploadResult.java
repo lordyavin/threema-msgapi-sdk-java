@@ -24,36 +24,28 @@
 
 package ch.threema.apitool.results;
 
-/**
- * Result of a file upload
- */
+/** Result of a file upload */
 public class UploadResult {
-	private final int responseCode;
-	private final byte[] blobId;
+  private final int responseCode;
+  private final byte[] blobId;
 
-	public UploadResult(int responseCode, byte[] blobId) {
-		this.responseCode = responseCode;
-		this.blobId = blobId;
-	}
+  public UploadResult(int responseCode, byte[] blobId) {
+    this.responseCode = responseCode;
+    this.blobId = blobId;
+  }
 
-	/**
-	 * @return the blob ID that has been created
-	 */
-	public byte[] getBlobId() {
-		return this.blobId;
-	}
+  /** @return the blob ID that has been created */
+  public byte[] getBlobId() {
+    return this.blobId;
+  }
 
-	/**
-	 * @return whether the upload succeeded
-	 */
-	public boolean isSuccess() {
-		return this.responseCode == 200;
-	}
+  /** @return whether the upload succeeded */
+  public boolean isSuccess() {
+    return this.responseCode == 200;
+  }
 
-	/**
-	 * @return the response code of the upload
-	 */
-	public int getResponseCode() {
-		return this.responseCode;
-	}
+  /** @return the response code of the upload */
+  public int getResponseCode() {
+    return this.responseCode;
+  }
 }

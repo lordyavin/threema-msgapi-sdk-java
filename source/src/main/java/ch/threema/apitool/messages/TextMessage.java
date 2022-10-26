@@ -26,39 +26,37 @@ package ch.threema.apitool.messages;
 
 import java.io.UnsupportedEncodingException;
 
-/**
- * A text message that can be sent/received with end-to-end encryption via Threema.
- */
+/** A text message that can be sent/received with end-to-end encryption via Threema. */
 public class TextMessage extends ThreemaMessage {
 
-	public static final int TYPE_CODE = 0x01;
+  public static final int TYPE_CODE = 0x01;
 
-	private final String text;
+  private final String text;
 
-	public TextMessage(String text) {
-		this.text = text;
-	}
+  public TextMessage(String text) {
+    this.text = text;
+  }
 
-	public String getText() {
-		return text;
-	}
+  public String getText() {
+    return text;
+  }
 
-	@Override
-	public int getTypeCode() {
-		return TYPE_CODE;
-	}
+  @Override
+  public int getTypeCode() {
+    return TYPE_CODE;
+  }
 
-	@Override
-	public String toString() {
-		return text;
-	}
+  @Override
+  public String toString() {
+    return text;
+  }
 
-	@Override
-	public byte[] getData() {
-		try {
-			return text.getBytes("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return null;
-		}
-	}
+  @Override
+  public byte[] getData() {
+    try {
+      return text.getBytes("UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      return null;
+    }
+  }
 }

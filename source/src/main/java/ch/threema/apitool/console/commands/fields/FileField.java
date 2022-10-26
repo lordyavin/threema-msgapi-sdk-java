@@ -28,22 +28,20 @@ import java.io.File;
 
 public class FileField extends Field {
 
-	public FileField(String key, boolean required) {
-		super(key, required);
-	}
+  public FileField(String key, boolean required) {
+    super(key, required);
+  }
 
-	public File getValue() {
-		if(this.value != null) {
-			return new File(this.value);
-		}
+  public File getValue() {
+    if (this.value != null) {
+      return new File(this.value);
+    }
 
-		return null;
-	}
+    return null;
+  }
 
-	@Override
-	protected boolean validate() {
-		return !this.isRequired()
-			|| (this.value != null
-				&& new File(this.value).isFile());
-	}
+  @Override
+  protected boolean validate() {
+    return !this.isRequired() || (this.value != null && new File(this.value).isFile());
+  }
 }

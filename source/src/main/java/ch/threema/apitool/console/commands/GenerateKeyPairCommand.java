@@ -33,25 +33,28 @@ import com.neilalexander.jnacl.NaCl;
 import java.io.File;
 
 public class GenerateKeyPairCommand extends Command {
-	private final TextField privateKeyPath;
-	private final TextField publicKeyPath;
+  private final TextField privateKeyPath;
+  private final TextField publicKeyPath;
 
-	public GenerateKeyPairCommand() {
-		super("Generate Key Pair",
-				"Generate a new key pair and write the private and public keys to the respective files (in hex).");
-		this.privateKeyPath = this.createTextField("privateKeyFile");
-		this.publicKeyPath = this.createTextField("publicKeyPath");
-	}
+  public GenerateKeyPairCommand() {
+    super(
+        "Generate Key Pair",
+        "Generate a new key pair and write the private and public keys to the respective files (in hex).");
+    this.privateKeyPath = this.createTextField("privateKeyFile");
+    this.publicKeyPath = this.createTextField("publicKeyPath");
+  }
 
-	@Override
-	protected void execute() throws Exception {
-		byte[] privateKey = new byte[NaCl.SECRETKEYBYTES];
-		byte[] publicKey = new byte[NaCl.PUBLICKEYBYTES];
+  @Override
+  protected void execute() throws Exception {
+    byte[] privateKey = new byte[NaCl.SECRETKEYBYTES];
+    byte[] publicKey = new byte[NaCl.PUBLICKEYBYTES];
 
-		CryptTool.generateKeyPair(privateKey, publicKey);
+    CryptTool.generateKeyPair(privateKey, publicKey);
 
-		// Write both keys to file
-		DataUtils.writeKeyFile(new File(this.privateKeyPath.getValue()), new Key(Key.KeyType.PRIVATE, privateKey));
-		DataUtils.writeKeyFile(new File(this.publicKeyPath.getValue()), new Key(Key.KeyType.PUBLIC, publicKey));
-	}
+    // Write both keys to file
+    DataUtils.writeKeyFile(
+        new File(this.privateKeyPath.getValue()), new Key(Key.KeyType.PRIVATE, privateKey));
+    DataUtils.writeKeyFile(
+        new File(this.publicKeyPath.getValue()), new Key(Key.KeyType.PUBLIC, publicKey));
+  }
 }

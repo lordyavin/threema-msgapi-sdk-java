@@ -29,29 +29,30 @@ import ch.threema.apitool.console.commands.fields.TextField;
 import ch.threema.apitool.console.commands.fields.ThreemaIDField;
 
 public class IDLookupByPhoneNo extends Command {
-	private final TextField phoneNoField;
-	private final ThreemaIDField fromField;
-	private final TextField secretField;
+  private final TextField phoneNoField;
+  private final ThreemaIDField fromField;
+  private final TextField secretField;
 
-	public IDLookupByPhoneNo() {
-		super("ID Lookup By Phone Number",
-				"Lookup the ID linked to the given phone number (will be hashed locally).");
+  public IDLookupByPhoneNo() {
+    super(
+        "ID Lookup By Phone Number",
+        "Lookup the ID linked to the given phone number (will be hashed locally).");
 
-		this.phoneNoField = this.createTextField("phoneNo");
-		this.fromField = this.createThreemaId("from");
-		this.secretField = this.createTextField("secret");
-	}
+    this.phoneNoField = this.createTextField("phoneNo");
+    this.fromField = this.createThreemaId("from");
+    this.secretField = this.createTextField("secret");
+  }
 
-	@Override
-	protected void execute() throws Exception {
-		String phoneNo = this.phoneNoField.getValue();
-		String from = this.fromField.getValue();
-		String secret = this.secretField.getValue();
+  @Override
+  protected void execute() throws Exception {
+    String phoneNo = this.phoneNoField.getValue();
+    String from = this.fromField.getValue();
+    String secret = this.secretField.getValue();
 
-		APIConnector apiConnector = this.createConnector(from, secret);
-		String id = apiConnector.lookupPhone(phoneNo);
-		if (id != null) {
-			System.out.println(id);
-		}
-	}
+    APIConnector apiConnector = this.createConnector(from, secret);
+    String id = apiConnector.lookupPhone(phoneNo);
+    if (id != null) {
+      System.out.println(id);
+    }
+  }
 }

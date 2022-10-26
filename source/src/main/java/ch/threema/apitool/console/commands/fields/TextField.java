@@ -25,11 +25,11 @@
 package ch.threema.apitool.console.commands.fields;
 
 public class TextField extends Field {
-	public TextField(String key, boolean required) {
-		super(key, required);
-	}
+  public TextField(String key, boolean required) {
+    super(key, required);
+  }
 
-	public String getValue() {
-		return this.value;
-	}
+  public String getValue() {
+    return this.value;
+  }
 }

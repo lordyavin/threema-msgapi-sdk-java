@@ -24,10 +24,8 @@
 
 package ch.threema.apitool.exceptions;
 
-/**
- * Exception that gets thrown on a illegal call.
- */
+/** Exception that gets thrown on a illegal call. */
 public class NotAllowedException extends Exception {
 
-    private static final long serialVersionUID = 3032360799153840206L;
+  private static final long serialVersionUID = 3032360799153840206L;
 }

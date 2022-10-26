@@ -27,11 +27,11 @@ package ch.threema.apitool.console.commands.fields;
 import ch.threema.apitool.DataUtils;
 
 public class ByteArrayField extends Field {
-	public ByteArrayField(String key, boolean required) {
-		super(key, required);
-	}
+  public ByteArrayField(String key, boolean required) {
+    super(key, required);
+  }
 
-	public byte[] getValue() {
-		return DataUtils.hexStringToByteArray(this.value);
-	}
+  public byte[] getValue() {
+    return DataUtils.hexStringToByteArray(this.value);
+  }
 }

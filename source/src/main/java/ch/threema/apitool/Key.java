@@ -26,77 +26,74 @@ package ch.threema.apitool;
 
 import ch.threema.apitool.exceptions.InvalidKeyException;
 
-/**
- * Encapsulates an asymmetric key, either public or private.
- */
+/** Encapsulates an asymmetric key, either public or private. */
 public class Key {
-    public static final String separator = ":";
+  public static final String separator = ":";
 
-    public static class KeyType {
-        public static final String PRIVATE = "private";
-        public static final String PUBLIC = "public";
+  public static class KeyType {
+    public static final String PRIVATE = "private";
+    public static final String PUBLIC = "public";
+  }
+
+  /* Attributes */
+  public byte[] key;
+  public String type;
+
+  public Key(String type, byte[] key) {
+    this.key = key;
+    this.type = type;
+  }
+
+  /**
+   * Decodes and validates an encoded key. Encoded key format: type:hex_key
+   *
+   * @param encodedKey an encoded key
+   * @throws ch.threema.apitool.exceptions.InvalidKeyException
+   */
+  public static Key decodeKey(String encodedKey) throws InvalidKeyException {
+    // Split key and check length
+    String[] keyArray = encodedKey.split(Key.separator);
+    if (keyArray.length != 2) {
+      throw new InvalidKeyException("Does not contain a valid key format");
     }
 
-    /* Attributes */
-    public byte[] key;
-    public String type;
+    // Unpack key
+    String keyType = keyArray[0];
+    String keyContent = keyArray[1];
 
-    public Key(String type, byte[] key) {
-        this.key = key;
-        this.type = type;
+    // Is this a valid hex key?
+    if (!keyContent.matches("[0-9a-fA-F]{64}")) {
+      throw new InvalidKeyException("Does not contain a valid key");
     }
 
-    /**
-     * Decodes and validates an encoded key.
-     * Encoded key format: type:hex_key
-     *
-     * @param encodedKey an encoded key
-     * @throws ch.threema.apitool.exceptions.InvalidKeyException
-     */
-    public static Key decodeKey(String encodedKey) throws InvalidKeyException {
-        // Split key and check length
-        String[] keyArray = encodedKey.split(Key.separator);
-        if (keyArray.length != 2) {
-            throw new InvalidKeyException("Does not contain a valid key format");
-        }
+    return new Key(keyType, DataUtils.hexStringToByteArray(keyContent));
+  }
 
-        // Unpack key
-        String keyType = keyArray[0];
-        String keyContent = keyArray[1];
+  /**
+   * Decodes and validates an encoded key. Encoded key format: type:hex_key
+   *
+   * @param encodedKey an encoded key
+   * @param expectedKeyType the expected type of the key
+   * @throws InvalidKeyException
+   */
+  public static Key decodeKey(String encodedKey, String expectedKeyType)
+      throws InvalidKeyException {
+    Key key = decodeKey(encodedKey);
 
-        // Is this a valid hex key?
-        if (!keyContent.matches("[0-9a-fA-F]{64}")) {
-            throw new InvalidKeyException("Does not contain a valid key");
-        }
-
-        return new Key(keyType, DataUtils.hexStringToByteArray(keyContent));
+    // Check key type
+    if (!key.type.equals(expectedKeyType)) {
+      throw new InvalidKeyException("Expected key type: " + expectedKeyType + ", got: " + key.type);
     }
 
-    /**
-     * Decodes and validates an encoded key.
-     * Encoded key format: type:hex_key
-     *
-     * @param encodedKey an encoded key
-     * @param expectedKeyType the expected type of the key
-     * @throws InvalidKeyException
-     */
-    public static Key decodeKey(String encodedKey, String expectedKeyType) throws InvalidKeyException {
-        Key key = decodeKey(encodedKey);
+    return key;
+  }
 
-        // Check key type
-        if (!key.type.equals(expectedKeyType)) {
-            throw new InvalidKeyException("Expected key type: " + expectedKeyType + ", got: " + key.type);
-        }
-
-        return key;
-    }
-
-    /**
-     * Encodes a key.
-     *
-     * @return an encoded key
-     */
-    public String encode() {
-        return this.type + Key.separator + DataUtils.byteArrayToHexString(this.key);
-    }
+  /**
+   * Encodes a key.
+   *
+   * @return an encoded key
+   */
+  public String encode() {
+    return this.type + Key.separator + DataUtils.byteArrayToHexString(this.key);
+  }
 }

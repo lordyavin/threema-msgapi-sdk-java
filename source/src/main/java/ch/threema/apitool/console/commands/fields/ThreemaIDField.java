@@ -25,11 +25,11 @@
 package ch.threema.apitool.console.commands.fields;
 
 public class ThreemaIDField extends Field {
-	public ThreemaIDField(String key, boolean required) {
-		super(key, required);
-	}
+  public ThreemaIDField(String key, boolean required) {
+    super(key, required);
+  }
 
-	public String getValue() {
-		return this.value;
-	}
+  public String getValue() {
+    return this.value;
+  }
 }

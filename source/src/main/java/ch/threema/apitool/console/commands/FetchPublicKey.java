@@ -30,29 +30,28 @@ import ch.threema.apitool.console.commands.fields.ThreemaIDField;
 import ch.threema.apitool.Key;
 
 public class FetchPublicKey extends Command {
-	private final ThreemaIDField threemaIdField;
-	private final ThreemaIDField fromField;
-	private final TextField secretField;
+  private final ThreemaIDField threemaIdField;
+  private final ThreemaIDField fromField;
+  private final TextField secretField;
 
-	public FetchPublicKey() {
-		super("Fetch Public Key",
-				"Lookup the public key for the given ID.");
+  public FetchPublicKey() {
+    super("Fetch Public Key", "Lookup the public key for the given ID.");
 
-		this.threemaIdField = this.createThreemaId("id");
-		this.fromField = this.createThreemaId("from");
-		this.secretField = this.createTextField("secret");
-	}
+    this.threemaIdField = this.createThreemaId("id");
+    this.fromField = this.createThreemaId("from");
+    this.secretField = this.createTextField("secret");
+  }
 
-	@Override
-	protected void execute() throws Exception {
-		String threemaId = this.threemaIdField.getValue();
-		String from = this.fromField.getValue();
-		String secret = this.secretField.getValue();
+  @Override
+  protected void execute() throws Exception {
+    String threemaId = this.threemaIdField.getValue();
+    String from = this.fromField.getValue();
+    String secret = this.secretField.getValue();
 
-		APIConnector apiConnector = this.createConnector(from, secret);
-		byte[] publicKey = apiConnector.lookupKey(threemaId);
-		if (publicKey != null) {
-			System.out.println(new Key(Key.KeyType.PUBLIC, publicKey).encode());
-		}
-	}
+    APIConnector apiConnector = this.createConnector(from, secret);
+    byte[] publicKey = apiConnector.lookupKey(threemaId);
+    if (publicKey != null) {
+      System.out.println(new Key(Key.KeyType.PUBLIC, publicKey).encode());
+    }
+  }
 }

@@ -31,28 +31,29 @@ import ch.threema.apitool.DataUtils;
 import ch.threema.apitool.results.EncryptResult;
 
 public class EncryptCommand extends Command {
-	private final PrivateKeyField privateKeyField;
-	private final PublicKeyField publicKeyField;
+  private final PrivateKeyField privateKeyField;
+  private final PublicKeyField publicKeyField;
 
-	public EncryptCommand() {
-		super("Encrypt",
-				"Encrypt standard input using the given sender private key and recipient public key. Prints two lines to standard output: first the nonce (hex), and then the box (hex).");
+  public EncryptCommand() {
+    super(
+        "Encrypt",
+        "Encrypt standard input using the given sender private key and recipient public key. Prints two lines to standard output: first the nonce (hex), and then the box (hex).");
 
-		this.privateKeyField = this.createPrivateKeyField("privateKey");
-		this.publicKeyField = this.createPublicKeyField("publicKey");
-	}
+    this.privateKeyField = this.createPrivateKeyField("privateKey");
+    this.publicKeyField = this.createPublicKeyField("publicKey");
+  }
 
-	@Override
-	protected void execute() throws Exception {
-		byte[] privateKey = this.privateKeyField.getValue();
-		byte[] publicKey = this.publicKeyField.getValue();
+  @Override
+  protected void execute() throws Exception {
+    byte[] privateKey = this.privateKeyField.getValue();
+    byte[] publicKey = this.publicKeyField.getValue();
 
-		/* read text from stdin */
-		String text = readStream(System.in, "UTF-8").trim();
+    /* read text from stdin */
+    String text = readStream(System.in, "UTF-8").trim();
 
-		EncryptResult res = CryptTool.encryptTextMessage(text, privateKey, publicKey);
+    EncryptResult res = CryptTool.encryptTextMessage(text, privateKey, publicKey);
 
-		System.out.println(DataUtils.byteArrayToHexString(res.getNonce()));
-		System.out.println(DataUtils.byteArrayToHexString(res.getResult()));
-	}
+    System.out.println(DataUtils.byteArrayToHexString(res.getNonce()));
+    System.out.println(DataUtils.byteArrayToHexString(res.getResult()));
+  }
 }

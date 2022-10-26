@@ -24,13 +24,11 @@
 
 package ch.threema.apitool.exceptions;
 
-/**
- * Exception that gets thrown when an invalid key has been specified (e.g. wrong length).
- */
+/** Exception that gets thrown when an invalid key has been specified (e.g. wrong length). */
 public class InvalidKeyException extends Exception {
-    private static final long serialVersionUID = 7585373757748175309L;
+  private static final long serialVersionUID = 7585373757748175309L;
 
-    public InvalidKeyException(String s) {
-        super(s);
-    }
+  public InvalidKeyException(String s) {
+    super(s);
+  }
 }

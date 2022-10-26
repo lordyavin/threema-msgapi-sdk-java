@@ -25,10 +25,10 @@
 package ch.threema.apitool.exceptions;
 
 /**
- * Exception that gets thrown when an attempt has been made to decrypt a message
- * of a type that is not supported by this library.
+ * Exception that gets thrown when an attempt has been made to decrypt a message of a type that is
+ * not supported by this library.
  */
 public class UnsupportedMessageTypeException extends MessageParseException {
 
-    private static final long serialVersionUID = -686063411249892256L;
+  private static final long serialVersionUID = -686063411249892256L;
 }

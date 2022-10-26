@@ -29,20 +29,19 @@ import ch.threema.apitool.CryptTool;
 import ch.threema.apitool.DataUtils;
 
 public class HashPhoneCommand extends Command {
-	private final TextField phoneNo;
+  private final TextField phoneNo;
 
-	public HashPhoneCommand() {
-		super("Hash Phone Number",
-				"Hash a phone number for identity lookup. Prints the hash in hex.");
+  public HashPhoneCommand() {
+    super("Hash Phone Number", "Hash a phone number for identity lookup. Prints the hash in hex.");
 
-		this.phoneNo = this.createTextField("phoneNo", true);
-	}
+    this.phoneNo = this.createTextField("phoneNo", true);
+  }
 
-	@Override
-	protected void execute() throws Exception {
-		String phoneNo = this.phoneNo.getValue();
+  @Override
+  protected void execute() throws Exception {
+    String phoneNo = this.phoneNo.getValue();
 
-		byte[] phoneHash = CryptTool.hashPhoneNo(phoneNo);
-		System.out.println(DataUtils.byteArrayToHexString(phoneHash));
-	}
+    byte[] phoneHash = CryptTool.hashPhoneNo(phoneNo);
+    System.out.println(DataUtils.byteArrayToHexString(phoneHash));
+  }
 }

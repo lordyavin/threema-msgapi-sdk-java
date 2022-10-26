@@ -29,21 +29,21 @@ import ch.threema.apitool.CryptTool;
 import ch.threema.apitool.Key;
 
 public class DerivePublicKeyCommand extends Command {
-	private final PrivateKeyField privateKeyField;
+  private final PrivateKeyField privateKeyField;
 
-	public DerivePublicKeyCommand() {
-		super("Derive Public Key",
-				"Derive the public key that corresponds with the given private key.");
+  public DerivePublicKeyCommand() {
+    super(
+        "Derive Public Key", "Derive the public key that corresponds with the given private key.");
 
-		this.privateKeyField = this.createPrivateKeyField("privateKey");
-	}
+    this.privateKeyField = this.createPrivateKeyField("privateKey");
+  }
 
-	@Override
-	protected void execute() throws Exception {
-		byte[] privateKey = this.privateKeyField.getValue();
-		byte[] publicKey = CryptTool.derivePublicKey(privateKey);
+  @Override
+  protected void execute() throws Exception {
+    byte[] privateKey = this.privateKeyField.getValue();
+    byte[] publicKey = CryptTool.derivePublicKey(privateKey);
 
-		System.out.println("res");
-		System.out.println(new Key(Key.KeyType.PUBLIC, publicKey).encode());
-	}
+    System.out.println("res");
+    System.out.println(new Key(Key.KeyType.PUBLIC, publicKey).encode());
+  }
 }

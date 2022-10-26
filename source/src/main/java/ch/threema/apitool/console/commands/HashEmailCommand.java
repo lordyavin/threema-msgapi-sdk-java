@@ -29,18 +29,18 @@ import ch.threema.apitool.CryptTool;
 import ch.threema.apitool.DataUtils;
 
 public class HashEmailCommand extends Command {
-	private final TextField emailField;
+  private final TextField emailField;
 
-	public HashEmailCommand() {
-		super("Hash Email Address",
-				"Hash an email address for identity lookup. Prints the hash in hex.");
+  public HashEmailCommand() {
+    super(
+        "Hash Email Address", "Hash an email address for identity lookup. Prints the hash in hex.");
 
-		this.emailField = this.createTextField("email", true);
-	}
+    this.emailField = this.createTextField("email", true);
+  }
 
-	@Override
-	protected void execute() throws Exception {
-		byte[] emailHash = CryptTool.hashEmail(this.emailField.getValue());
-		System.out.println(DataUtils.byteArrayToHexString(emailHash));
-	}
+  @Override
+  protected void execute() throws Exception {
+    byte[] emailHash = CryptTool.hashEmail(this.emailField.getValue());
+    System.out.println(DataUtils.byteArrayToHexString(emailHash));
+  }
 }

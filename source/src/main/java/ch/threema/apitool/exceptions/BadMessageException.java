@@ -24,10 +24,8 @@
 
 package ch.threema.apitool.exceptions;
 
-/**
- * Exception that gets thrown if a message has a bad/illegal format after it has been decrypted.
- */
+/** Exception that gets thrown if a message has a bad/illegal format after it has been decrypted. */
 public class BadMessageException extends MessageParseException {
 
-    private static final long serialVersionUID = 4812096297596964107L;
+  private static final long serialVersionUID = 4812096297596964107L;
 }

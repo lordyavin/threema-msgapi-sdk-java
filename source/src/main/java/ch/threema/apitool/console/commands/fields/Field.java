@@ -29,41 +29,41 @@ import ch.threema.apitool.exceptions.RequiredCommandFieldMissingException;
 
 public abstract class Field {
 
-	private final String key;
-	private final boolean required;
-	protected String value;
+  private final String key;
+  private final boolean required;
+  protected String value;
 
-	protected Field(String key, boolean required) {
-		this.key = key;
-		this.required = required;
-	}
+  protected Field(String key, boolean required) {
+    this.key = key;
+    this.required = required;
+  }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-	public boolean isRequired() {
-		return this.required;
-	}
+  public boolean isRequired() {
+    return this.required;
+  }
 
-	public String getKey() {
-		return this.key;
-	}
+  public String getKey() {
+    return this.key;
+  }
 
-	public boolean isValid() throws RequiredCommandFieldMissingException, InvalidCommandFieldValueException {
-		if(this.isRequired() && this.value == null) {
-			throw new RequiredCommandFieldMissingException("required field " + this.key + " not set");
-		}
+  public boolean isValid()
+      throws RequiredCommandFieldMissingException, InvalidCommandFieldValueException {
+    if (this.isRequired() && this.value == null) {
+      throw new RequiredCommandFieldMissingException("required field " + this.key + " not set");
+    }
 
-		if(!this.validate()) {
-			throw new InvalidCommandFieldValueException("field " + this.key + " value invalid");
-		}
+    if (!this.validate()) {
+      throw new InvalidCommandFieldValueException("field " + this.key + " value invalid");
+    }
 
-		return true;
-	}
+    return true;
+  }
 
-	protected boolean validate() {
-		return true;
-	}
-
+  protected boolean validate() {
+    return true;
+  }
 }

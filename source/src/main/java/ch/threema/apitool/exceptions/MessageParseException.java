@@ -29,5 +29,5 @@ package ch.threema.apitool.exceptions;
  */
 public class MessageParseException extends Exception {
 
-    private static final long serialVersionUID = 6829629439344637547L;
+  private static final long serialVersionUID = 6829629439344637547L;
 }

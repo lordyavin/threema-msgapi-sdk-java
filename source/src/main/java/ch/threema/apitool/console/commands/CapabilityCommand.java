@@ -29,28 +29,27 @@ import ch.threema.apitool.console.commands.fields.ThreemaIDField;
 import ch.threema.apitool.results.CapabilityResult;
 
 public class CapabilityCommand extends Command {
-	private final ThreemaIDField threemaIdField;
-	private final ThreemaIDField fromField;
-	private final TextField secretField;
+  private final ThreemaIDField threemaIdField;
+  private final ThreemaIDField fromField;
+  private final TextField secretField;
 
-	public CapabilityCommand() {
-		super("Fetch Capability",
-				"Fetch the capability of a Threema ID");
+  public CapabilityCommand() {
+    super("Fetch Capability", "Fetch the capability of a Threema ID");
 
-		this.threemaIdField = this.createThreemaId("id");
-		this.fromField = this.createThreemaId("from");
-		this.secretField = this.createTextField("secret");
-	}
+    this.threemaIdField = this.createThreemaId("id");
+    this.fromField = this.createThreemaId("from");
+    this.secretField = this.createTextField("secret");
+  }
 
-	@Override
-	protected void execute() throws Exception {
-		String threemaId = this.threemaIdField.getValue();
-		String from = this.fromField.getValue();
-		String secret = this.secretField.getValue();
+  @Override
+  protected void execute() throws Exception {
+    String threemaId = this.threemaIdField.getValue();
+    String from = this.fromField.getValue();
+    String secret = this.secretField.getValue();
 
-		CapabilityResult capabilities = this.createConnector(from, secret)
-				.lookupKeyCapability(threemaId);
+    CapabilityResult capabilities =
+        this.createConnector(from, secret).lookupKeyCapability(threemaId);
 
-		System.out.println(capabilities);
-	}
+    System.out.println(capabilities);
+  }
 }

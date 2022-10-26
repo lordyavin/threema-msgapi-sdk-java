@@ -32,22 +32,21 @@ import java.io.File;
 import java.io.IOException;
 
 public abstract class KeyField extends Field {
-	public KeyField(String key, boolean required) {
-		super(key, required);
-	}
+  public KeyField(String key, boolean required) {
+    super(key, required);
+  }
 
+  byte[] readKey(String argument, String expectedKeyType) throws IOException, InvalidKeyException {
+    Key key;
 
-	byte[] readKey(String argument, String expectedKeyType) throws IOException, InvalidKeyException {
-		Key key;
+    // Try to open a file with that name
+    File keyFile = new File(argument);
+    if (keyFile.isFile()) {
+      key = DataUtils.readKeyFile(keyFile, expectedKeyType);
+    } else {
+      key = Key.decodeKey(argument, expectedKeyType);
+    }
 
-		// Try to open a file with that name
-		File keyFile = new File(argument);
-		if (keyFile.isFile()) {
-			key = DataUtils.readKeyFile(keyFile, expectedKeyType);
-		} else {
-			key = Key.decodeKey(argument, expectedKeyType);
-		}
-
-		return key.key;
-	}
+    return key.key;
+  }
 }

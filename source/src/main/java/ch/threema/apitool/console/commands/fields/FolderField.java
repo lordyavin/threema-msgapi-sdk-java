@@ -28,11 +28,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FolderField extends Field {
-	public FolderField(String key, boolean required) {
-		super(key, required);
-	}
+  public FolderField(String key, boolean required) {
+    super(key, required);
+  }
 
-	public Path getValue() {
-		return Paths.get(this.value);
-	}
+  public Path getValue() {
+    return Paths.get(this.value);
+  }
 }

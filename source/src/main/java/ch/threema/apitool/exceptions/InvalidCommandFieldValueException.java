@@ -24,13 +24,11 @@
 
 package ch.threema.apitool.exceptions;
 
-/**
- * Exception that gets thrown on a illegal call.
- */
+/** Exception that gets thrown on a illegal call. */
 public class InvalidCommandFieldValueException extends Exception {
-    private static final long serialVersionUID = -6293436769165519745L;
+  private static final long serialVersionUID = -6293436769165519745L;
 
-    public InvalidCommandFieldValueException(String message) {
-        super(message);
-    }
+  public InvalidCommandFieldValueException(String message) {
+    super(message);
+  }
 }
