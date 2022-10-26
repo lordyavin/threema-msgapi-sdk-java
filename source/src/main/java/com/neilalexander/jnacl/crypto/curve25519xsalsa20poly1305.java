@@ -82,18 +82,18 @@ public class curve25519xsalsa20poly1305 {
   }
 
   public static int crypto_box_afternm(byte[] c, byte[] m, byte[] n, byte[] k) {
-    return crypto_box_afternm(c, m, (long) m.length, n, k);
+    return crypto_box_afternm(c, m, m.length, n, k);
   }
 
   public static int crypto_box_open_afternm(byte[] m, byte[] c, byte[] n, byte[] k) {
-    return crypto_box_open_afternm(m, c, (long) c.length, n, k);
+    return crypto_box_open_afternm(m, c, c.length, n, k);
   }
 
   public static int crypto_box(byte[] c, byte[] m, byte[] n, byte[] pk, byte[] sk) {
-    return crypto_box(c, m, (long) m.length, n, pk, sk);
+    return crypto_box(c, m, m.length, n, pk, sk);
   }
 
   public static int crypto_box_open(byte[] m, byte[] c, byte[] n, byte[] pk, byte[] sk) {
-    return crypto_box_open(m, c, (long) c.length, n, pk, sk);
+    return crypto_box_open(m, c, c.length, n, pk, sk);
   }
 }

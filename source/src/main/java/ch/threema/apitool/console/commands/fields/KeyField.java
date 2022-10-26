@@ -24,12 +24,12 @@
 
 package ch.threema.apitool.console.commands.fields;
 
+import java.io.File;
+import java.io.IOException;
+
 import ch.threema.apitool.DataUtils;
 import ch.threema.apitool.Key;
 import ch.threema.apitool.exceptions.InvalidKeyException;
-
-import java.io.File;
-import java.io.IOException;
 
 public abstract class KeyField extends Field {
   public KeyField(String key, boolean required) {

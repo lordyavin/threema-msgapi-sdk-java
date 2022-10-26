@@ -25,9 +25,9 @@
 package ch.threema.apitool.console.commands;
 
 import ch.threema.apitool.APIConnector;
+import ch.threema.apitool.Key;
 import ch.threema.apitool.console.commands.fields.TextField;
 import ch.threema.apitool.console.commands.fields.ThreemaIDField;
-import ch.threema.apitool.Key;
 
 public class FetchPublicKey extends Command {
   private final ThreemaIDField threemaIdField;

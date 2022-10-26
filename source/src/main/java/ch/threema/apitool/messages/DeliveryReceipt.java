@@ -24,9 +24,9 @@
 
 package ch.threema.apitool.messages;
 
-import ch.threema.apitool.MessageId;
-
 import java.util.List;
+
+import ch.threema.apitool.MessageId;
 
 /**
  * A delivery receipt message that can be sent/received with end-to-end encryption via Threema. Each

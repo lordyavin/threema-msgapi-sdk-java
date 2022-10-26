@@ -24,11 +24,15 @@
 
 package ch.threema.apitool.console.commands;
 
-import ch.threema.apitool.DataUtils;
-import ch.threema.apitool.console.commands.fields.*;
-import ch.threema.apitool.helpers.E2EHelper;
-
 import java.nio.file.Path;
+
+import ch.threema.apitool.DataUtils;
+import ch.threema.apitool.console.commands.fields.ByteArrayField;
+import ch.threema.apitool.console.commands.fields.FolderField;
+import ch.threema.apitool.console.commands.fields.PrivateKeyField;
+import ch.threema.apitool.console.commands.fields.TextField;
+import ch.threema.apitool.console.commands.fields.ThreemaIDField;
+import ch.threema.apitool.helpers.E2EHelper;
 
 public class DecryptAndDownloadCommand extends Command {
   private final ThreemaIDField threemaId;

@@ -24,17 +24,26 @@
 
 package ch.threema.apitool;
 
-import ch.threema.apitool.results.CapabilityResult;
-import ch.threema.apitool.results.EncryptResult;
-import ch.threema.apitool.results.UploadResult;
-
-import javax.net.ssl.HttpsURLConnection;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import ch.threema.apitool.results.CapabilityResult;
+import ch.threema.apitool.results.EncryptResult;
+import ch.threema.apitool.results.UploadResult;
 
 /** Facilitates HTTPS communication with the Threema Message API. */
 public class APIConnector {
@@ -347,7 +356,7 @@ public class APIConnector {
   }
 
   private Map<String, String> makeRequestParams() {
-    Map<String, String> postParams = new HashMap<String, String>();
+    Map<String, String> postParams = new HashMap<>();
 
     postParams.put("from", apiIdentity);
     postParams.put("secret", secret);

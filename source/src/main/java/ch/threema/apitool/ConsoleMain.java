@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  * The MIT License (MIT)
  * Copyright (c) 2015 Threema GmbH
  *
@@ -27,9 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import ch.threema.apitool.console.commands.CapabilityCommand;
 import ch.threema.apitool.console.commands.Command;
@@ -59,7 +56,7 @@ public class ConsoleMain {
     protected final List<CommandGroup> commandGroups = new ArrayList<>();
 
     public CommandGroup create(String description) {
-      CommandGroup g = new CommandGroup(description);
+      var g = new CommandGroup(description);
       this.commandGroups.add(g);
       return g;
     }
@@ -67,7 +64,7 @@ public class ConsoleMain {
     public ArgumentCommand find(String... arguments) {
       if (arguments.length > 0) {
         for (CommandGroup g : this.commandGroups) {
-          ArgumentCommand c = g.find(arguments);
+          var c = g.find(arguments);
           if (c != null) {
             return c;
           }
@@ -92,17 +89,16 @@ public class ConsoleMain {
 
     public ArgumentCommand find(String... arguments) {
       ArgumentCommand matchedArgumentCommand = null;
-      int argMatchedSize = -1;
+      var argMatchedSize = -1;
       for (ArgumentCommand c : this.argumentCommands) {
-        boolean matched = true;
-        int matchedSize = 0;
-        for (int n = 0; n < c.arguments.length; n++) {
+        var matched = true;
+        var matchedSize = 0;
+        for (var n = 0; n < c.arguments.length; n++) {
           if (n > arguments.length || !c.arguments[n].equals(arguments[n])) {
             matched = false;
             break;
-          } else {
-            matchedSize++;
           }
+          matchedSize++;
         }
 
         if (matched && matchedSize > argMatchedSize) {
@@ -129,8 +125,7 @@ public class ConsoleMain {
       }
 
       this.command.run(
-          (String[])
-              ArrayUtils.subarray(givenArguments, this.arguments.length, givenArguments.length));
+          ArrayUtils.subarray(givenArguments, this.arguments.length, givenArguments.length));
     }
   }
 
@@ -160,9 +155,9 @@ public class ConsoleMain {
         .add(new DecryptAndDownloadCommand(), "-D")
         .add(new CreditsCommand(), "-C");
 
-    ArgumentCommand argumentCommand = commands.find(args);
+    var argumentCommand = commands.find(args);
     if (argumentCommand == null) {
-      usage(args.length == 1 && args[0].equals("html"));
+      usage(args.length == 1 && "html".equals(args[0]));
     } else {
       argumentCommand.run(args);
     }
@@ -184,20 +179,20 @@ public class ConsoleMain {
       System.out.println("(file contents also in hex with the prefix).\n");
     }
 
-    String groupDescriptionTemplate =
+    var groupDescriptionTemplate =
         htmlOutput ? "<h3>%s</h3>\n" : "\n%s\n" + StringUtils.repeat("-", 80) + "\n\n";
-    String commandTemplate =
+    var commandTemplate =
         htmlOutput ? "<pre><code>java -jar threema-msgapi-tool.jar %s</code></pre>\n" : "%s\n";
 
     for (CommandGroup commandGroup : commands.commandGroups) {
       System.out.format(groupDescriptionTemplate, commandGroup.description);
 
       for (ArgumentCommand argumentCommand : commandGroup.argumentCommands) {
-        StringBuilder command = new StringBuilder();
-        for (int n = 0; n < argumentCommand.arguments.length; n++) {
-          command.append(argumentCommand.arguments[n]).append(" ");
+        var command = new StringBuilder();
+        for (String argument : argumentCommand.arguments) {
+          command.append(argument).append(" ");
         }
-        String argumentDescription = argumentCommand.command.getUsageArguments();
+        var argumentDescription = argumentCommand.command.getUsageArguments();
         if (htmlOutput) {
           System.out.format("<h4>%s</h4>\n", argumentCommand.command.getSubject());
           argumentDescription = StringEscapeUtils.escapeHtml3(argumentDescription);
@@ -206,11 +201,12 @@ public class ConsoleMain {
 
         System.out.format(commandTemplate, command.toString().trim());
 
-        String description = argumentCommand.command.getUsageDescription();
+        var description = argumentCommand.command.getUsageDescription();
         if (htmlOutput) {
           System.out.format("<p>%s</p>\n\n", description);
         } else {
-          System.out.println("   " + WordUtils.wrap(description, 76, "\n   ", false));
+          System.out.println(
+              "   " + org.apache.commons.text.WordUtils.wrap(description, 76, "\n   ", false));
           System.out.println("");
         }
       }

@@ -24,9 +24,9 @@
 
 package ch.threema.apitool.console.commands;
 
-import ch.threema.apitool.console.commands.fields.PrivateKeyField;
 import ch.threema.apitool.CryptTool;
 import ch.threema.apitool.Key;
+import ch.threema.apitool.console.commands.fields.PrivateKeyField;
 
 public class DerivePublicKeyCommand extends Command {
   private final PrivateKeyField privateKeyField;

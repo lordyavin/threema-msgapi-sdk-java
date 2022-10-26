@@ -24,13 +24,13 @@
 
 package ch.threema.apitool.console.commands;
 
+import java.nio.file.Path;
+
 import ch.threema.apitool.console.commands.fields.FolderField;
 import ch.threema.apitool.console.commands.fields.PrivateKeyField;
 import ch.threema.apitool.console.commands.fields.TextField;
 import ch.threema.apitool.console.commands.fields.ThreemaIDField;
 import ch.threema.apitool.helpers.E2EHelper;
-
-import java.nio.file.Path;
 
 public class SendE2EImageMessageCommand extends Command {
   private final ThreemaIDField toField;

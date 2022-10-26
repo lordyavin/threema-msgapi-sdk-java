@@ -24,11 +24,11 @@
 
 package ch.threema.apitool.console.commands;
 
+import ch.threema.apitool.CryptTool;
+import ch.threema.apitool.DataUtils;
 import ch.threema.apitool.console.commands.fields.ByteArrayField;
 import ch.threema.apitool.console.commands.fields.PrivateKeyField;
 import ch.threema.apitool.console.commands.fields.PublicKeyField;
-import ch.threema.apitool.CryptTool;
-import ch.threema.apitool.DataUtils;
 import ch.threema.apitool.messages.ThreemaMessage;
 
 public class DecryptCommand extends Command {

@@ -24,9 +24,9 @@
 
 package ch.threema.apitool.console.commands;
 
-import ch.threema.apitool.console.commands.fields.TextField;
 import ch.threema.apitool.CryptTool;
 import ch.threema.apitool.DataUtils;
+import ch.threema.apitool.console.commands.fields.TextField;
 
 public class HashEmailCommand extends Command {
   private final TextField emailField;

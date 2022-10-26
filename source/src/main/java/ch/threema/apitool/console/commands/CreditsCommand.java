@@ -49,7 +49,7 @@ public class CreditsCommand extends Command {
       System.out.println("Remaining credits: " + credits);
     } else {
       System.out.println("Error fetching credits");
-      ;
+
     }
   }
 }

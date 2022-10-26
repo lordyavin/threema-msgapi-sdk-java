@@ -82,7 +82,7 @@ public class poly1305 {
 
     add(h, minusp);
 
-    int negative = (int) (-(h[16] >>> 7));
+    int negative = (-(h[16] >>> 7));
 
     for (int j = 0; j < 17; ++j) h[j] ^= negative & (horig[j] ^ h[j]);
   }

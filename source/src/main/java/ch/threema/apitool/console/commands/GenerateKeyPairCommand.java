@@ -24,13 +24,14 @@
 
 package ch.threema.apitool.console.commands;
 
-import ch.threema.apitool.console.commands.fields.TextField;
+import java.io.File;
+
+import com.neilalexander.jnacl.NaCl;
+
 import ch.threema.apitool.CryptTool;
 import ch.threema.apitool.DataUtils;
 import ch.threema.apitool.Key;
-import com.neilalexander.jnacl.NaCl;
-
-import java.io.File;
+import ch.threema.apitool.console.commands.fields.TextField;
 
 public class GenerateKeyPairCommand extends Command {
   private final TextField privateKeyPath;

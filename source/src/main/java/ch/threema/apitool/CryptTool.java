@@ -24,22 +24,29 @@
 
 package ch.threema.apitool;
 
-import ch.threema.apitool.exceptions.BadMessageException;
-import ch.threema.apitool.exceptions.DecryptionFailedException;
-import ch.threema.apitool.exceptions.MessageParseException;
-import ch.threema.apitool.exceptions.UnsupportedMessageTypeException;
-import ch.threema.apitool.messages.*;
-import ch.threema.apitool.results.EncryptResult;
-import ch.threema.apitool.results.UploadResult;
-import com.neilalexander.jnacl.NaCl;
-import org.apache.commons.io.EndianUtils;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.io.EndianUtils;
+
+import com.neilalexander.jnacl.NaCl;
+
+import ch.threema.apitool.exceptions.BadMessageException;
+import ch.threema.apitool.exceptions.DecryptionFailedException;
+import ch.threema.apitool.exceptions.MessageParseException;
+import ch.threema.apitool.exceptions.UnsupportedMessageTypeException;
+import ch.threema.apitool.messages.DeliveryReceipt;
+import ch.threema.apitool.messages.FileMessage;
+import ch.threema.apitool.messages.ImageMessage;
+import ch.threema.apitool.messages.TextMessage;
+import ch.threema.apitool.messages.ThreemaMessage;
+import ch.threema.apitool.results.EncryptResult;
+import ch.threema.apitool.results.UploadResult;
 
 /** Contains static methods to do various Threema cryptography related tasks. */
 public class CryptTool {
@@ -303,7 +310,7 @@ public class CryptTool {
         DeliveryReceipt.Type receiptType = DeliveryReceipt.Type.get(data[1] & 0xFF);
         if (receiptType == null) throw new BadMessageException();
 
-        List<MessageId> messageIds = new LinkedList<MessageId>();
+        List<MessageId> messageIds = new LinkedList<>();
 
         int numMsgIds = ((realDataLength - 2) / MessageId.MESSAGE_ID_LEN);
         for (int i = 0; i < numMsgIds; i++) {

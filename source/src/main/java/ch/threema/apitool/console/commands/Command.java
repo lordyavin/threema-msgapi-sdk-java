@@ -24,13 +24,24 @@
 
 package ch.threema.apitool.console.commands;
 
-import ch.threema.apitool.APIConnector;
-import ch.threema.apitool.PublicKeyStore;
-import ch.threema.apitool.console.commands.fields.*;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.LinkedList;
 import java.util.List;
+
+import ch.threema.apitool.APIConnector;
+import ch.threema.apitool.PublicKeyStore;
+import ch.threema.apitool.console.commands.fields.ByteArrayField;
+import ch.threema.apitool.console.commands.fields.Field;
+import ch.threema.apitool.console.commands.fields.FileField;
+import ch.threema.apitool.console.commands.fields.FolderField;
+import ch.threema.apitool.console.commands.fields.PrivateKeyField;
+import ch.threema.apitool.console.commands.fields.PublicKeyField;
+import ch.threema.apitool.console.commands.fields.TextField;
+import ch.threema.apitool.console.commands.fields.ThreemaIDField;
 
 public abstract class Command {
   private final List<Field> fields = new LinkedList<>();

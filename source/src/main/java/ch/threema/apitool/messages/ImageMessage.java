@@ -24,9 +24,11 @@
 
 package ch.threema.apitool.messages;
 
-import ch.threema.apitool.DataUtils;
-import com.neilalexander.jnacl.NaCl;
 import org.apache.commons.io.EndianUtils;
+
+import com.neilalexander.jnacl.NaCl;
+
+import ch.threema.apitool.DataUtils;
 
 /** An image message that can be sent/received with end-to-end encryption via Threema. */
 public class ImageMessage extends ThreemaMessage {
