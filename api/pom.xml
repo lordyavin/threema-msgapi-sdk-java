@@ -43,6 +43,10 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>eu.neilalexander</groupId>
+			<artifactId>jnacl</artifactId>
+		</dependency>
 	</dependencies>
 	<distributionManagement>
 		<repository>
