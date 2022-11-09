@@ -24,8 +24,8 @@
 
 package net.klesatschke.threema.cli.console.commands.fields;
 
-import net.klesatschke.threema.api.exceptions.InvalidCommandFieldValueException;
-import net.klesatschke.threema.api.exceptions.RequiredCommandFieldMissingException;
+import net.klesatschke.threema.cli.exceptions.InvalidCommandFieldValueException;
+import net.klesatschke.threema.cli.exceptions.RequiredCommandFieldMissingException;
 
 public abstract class Field {
 

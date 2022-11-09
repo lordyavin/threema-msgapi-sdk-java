@@ -42,11 +42,11 @@ import net.klesatschke.threema.api.APIConnector;
 import net.klesatschke.threema.api.CryptTool;
 import net.klesatschke.threema.api.exceptions.InvalidKeyException;
 import net.klesatschke.threema.api.exceptions.MessageParseException;
-import net.klesatschke.threema.api.exceptions.NotAllowedException;
 import net.klesatschke.threema.api.messages.FileMessage;
 import net.klesatschke.threema.api.messages.ImageMessage;
 import net.klesatschke.threema.api.messages.ThreemaMessage;
 import net.klesatschke.threema.api.results.UploadResult;
+import net.klesatschke.threema.cli.exceptions.NotAllowedException;
 
 /** Helper to handle Threema end-to-end encryption. */
 public class E2EHelper {

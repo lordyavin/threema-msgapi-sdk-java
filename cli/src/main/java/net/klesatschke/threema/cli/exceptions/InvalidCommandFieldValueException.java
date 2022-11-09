@@ -22,7 +22,7 @@
  * THE SOFTWARE
  */
 
-package net.klesatschke.threema.api.exceptions;
+package net.klesatschke.threema.cli.exceptions;
 
 /** Exception that gets thrown on a illegal call. */
 public class InvalidCommandFieldValueException extends Exception {
