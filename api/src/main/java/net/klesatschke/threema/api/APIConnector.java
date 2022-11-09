@@ -32,19 +32,31 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpClient.Redirect;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import lombok.extern.log4j.Log4j2;
+import net.klesatschke.threema.api.exceptions.ClientError;
+import net.klesatschke.threema.api.exceptions.ServerError;
+import net.klesatschke.threema.api.exceptions.ThreemaError;
 import net.klesatschke.threema.api.results.CapabilityResult;
 import net.klesatschke.threema.api.results.EncryptResult;
 import net.klesatschke.threema.api.results.UploadResult;
 
 /** Facilitates HTTPS communication with the Threema Message API. */
+@Log4j2
 public class APIConnector {
   private static final int BUFFER_SIZE = 16384;
 
@@ -72,6 +84,7 @@ public class APIConnector {
   private final PublicKeyStore publicKeyStore;
   private final String apiIdentity;
   private final String secret;
+  private HttpClient httpClient;
 
   public APIConnector(String apiIdentity, String secret, PublicKeyStore publicKeyStore) {
     this(apiIdentity, secret, "https://msgapi.threema.ch/", publicKeyStore);
@@ -83,6 +96,7 @@ public class APIConnector {
     this.secret = secret;
     this.apiUrl = apiUrl;
     this.publicKeyStore = publicKeyStore;
+    httpClient = HttpClient.newBuilder().followRedirects(Redirect.NEVER).build();
   }
 
   /**
@@ -129,17 +143,27 @@ public class APIConnector {
    * @throws IOException if a communication or server error occurs
    */
   public String lookupPhone(String phoneNumber) throws IOException {
+    var getParams = makeRequestParams();
+    var phoneHash = CryptTool.hashPhoneNo(phoneNumber);
 
     try {
-      var getParams = makeRequestParams();
-
-      var phoneHash = CryptTool.hashPhoneNo(phoneNumber);
-
       return doGet(
-          new URL(this.apiUrl + "lookup/phone_hash/" + DataUtils.byteArrayToHexString(phoneHash)),
+          URI.create(
+              this.apiUrl + "lookup/phone_hash/" + DataUtils.byteArrayToHexString(phoneHash)),
           getParams);
-    } catch (FileNotFoundException e) {
-      return null;
+    } catch (ThreemaError e) {
+      switch (e.getResponse().statusCode()) {
+        case 400:
+          throw new ClientError(e.getResponse(), "the hash length is wrong");
+        case 401:
+          throw new ClientError(e.getResponse(), "API identity or secret are incorrect");
+        case 404:
+          throw new ClientError(e.getResponse(), "no matching ID could be found");
+        case 500:
+          throw new ServerError(e.getResponse(), "a temporary internal server error occurs");
+        default:
+          throw e;
+      }
     }
   }
 
@@ -159,7 +183,8 @@ public class APIConnector {
       var emailHash = CryptTool.hashEmail(email);
 
       return doGet(
-          new URL(this.apiUrl + "lookup/email_hash/" + DataUtils.byteArrayToHexString(emailHash)),
+          URI.create(
+              this.apiUrl + "lookup/email_hash/" + DataUtils.byteArrayToHexString(emailHash)),
           getParams);
     } catch (FileNotFoundException e) {
       return null;
@@ -178,7 +203,7 @@ public class APIConnector {
     if (key == null) {
       try {
         var getParams = makeRequestParams();
-        var pubkeyHex = doGet(new URL(this.apiUrl + "pubkeys/" + id), getParams);
+        var pubkeyHex = doGet(URI.create(this.apiUrl + "pubkeys/" + id), getParams);
         key = DataUtils.hexStringToByteArray(pubkeyHex);
 
         if (key != null) {
@@ -199,7 +224,7 @@ public class APIConnector {
    * @throws IOException
    */
   public CapabilityResult lookupKeyCapability(String threemaId) throws IOException {
-    var res = doGet(new URL(this.apiUrl + "capabilities/" + threemaId), makeRequestParams());
+    var res = doGet(URI.create(this.apiUrl + "capabilities/" + threemaId), makeRequestParams());
     if (res != null) {
       return new CapabilityResult(threemaId, res.split(","));
     }
@@ -207,7 +232,7 @@ public class APIConnector {
   }
 
   public Integer lookupCredits() throws IOException {
-    var res = doGet(new URL(this.apiUrl + "credits"), makeRequestParams());
+    var res = doGet(URI.create(this.apiUrl + "credits"), makeRequestParams());
     if (res != null) {
       return Integer.valueOf(res);
     }
@@ -358,29 +383,28 @@ public class APIConnector {
     return Map.of("from", apiIdentity, "secret", secret);
   }
 
-  private String doGet(URL url, Map<String, String> getParams) throws IOException {
+  private String doGet(URI uri, Map<String, String> getParams) throws IOException {
+    var uriWithParameters =
+        Optional.ofNullable(getParams)
+            .map(params -> URI.create(uri.toString() + "?" + makeUrlEncoded(params)))
+            .orElse(uri);
 
-    if (getParams != null) {
-      var queryString = makeUrlEncoded(getParams);
+    var httpRequest = HttpRequest.newBuilder().uri(uriWithParameters).GET().build();
+    try {
+      HttpResponse<String> response = httpClient.send(httpRequest, BodyHandlers.ofString());
 
-      url = new URL(url.toString() + "?" + queryString);
+      var statusCode = response.statusCode();
+      if (400 <= statusCode) {
+        throw new ThreemaError(response);
+      }
+
+      return response.body();
+
+    } catch (InterruptedException e) {
+      log.warn("Interrupted");
+      Thread.currentThread().interrupt();
     }
-
-    var connection = (HttpsURLConnection) url.openConnection();
-    connection.setDoOutput(false);
-    connection.setDoInput(true);
-    connection.setInstanceFollowRedirects(false);
-    connection.setRequestMethod("GET");
-    connection.setUseCaches(false);
-
-    var is = connection.getInputStream();
-    var br = new BufferedReader(new InputStreamReader(is));
-    var response = br.readLine();
-    br.close();
-
-    connection.disconnect();
-
-    return response;
+    return null;
   }
 
   private String doPost(URL url, Map<String, String> postParams) throws IOException {
