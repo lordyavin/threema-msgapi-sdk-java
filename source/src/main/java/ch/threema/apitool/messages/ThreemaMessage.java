@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending, and receiving Threema messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,23 +26,61 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool.messages;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Pattern;
+
+import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import org.apache.commons.io.EndianUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONArray;
+
+import ch.threema.apitool.utils.DataUtils;
+import ch.threema.apitool.types.QuotePart;
 import ch.threema.apitool.exceptions.BadMessageException;
 
-/**
- * Abstract base class of messages that can be sent with end-to-end encryption via Threema.
- */
-public abstract class ThreemaMessage {
 
+import static ch.threema.apitool.utils.StringUtils.toIndentedString;
+
+/**
+ * ThreemaMessage
+ */
+@javax.annotation.Generated(value = "msgapi-sdk-codegen",
+				date = "2024-03-15T13:44:24.472344386+00:00")
+public abstract class ThreemaMessage {
 	public static final int BLOB_ID_LEN = 16;
 
 	/**
 	 * @return The message's raw content
 	 */
 	public abstract byte[] getData() throws BadMessageException;
+
+	public static ThreemaMessage fromString(byte[] jsonData, int realDataLength)
+					throws BadMessageException {
+		return null;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		return super.equals(o);
+	}
 
 	/**
 	 * @return the message's type code

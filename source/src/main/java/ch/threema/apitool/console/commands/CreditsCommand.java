@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending and receiving of Threema Messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +26,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool.console.commands;
@@ -28,28 +38,27 @@ import ch.threema.apitool.console.commands.fields.TextField;
 import ch.threema.apitool.console.commands.fields.ThreemaIDField;
 
 public class CreditsCommand extends Command {
-    private final ThreemaIDField fromField;
-    private final TextField secretField;
+	private final ThreemaIDField fromField;
+	private final TextField secretField;
 
-    public CreditsCommand() {
-        super("Credits", "Fetch the remaining credits");
+	public CreditsCommand() {
+		super("Credits", "Fetch the remaining credits");
 
-        this.fromField = this.createThreemaId("from");
-        this.secretField = this.createTextField("secret");
-    }
+		this.fromField = this.createThreemaId("gatewayId");
+		this.secretField = this.createTextField("secret");
+	}
 
-    @Override
-    protected void execute() throws Exception {
-        String from = this.fromField.getValue();
-        String secret = this.secretField.getValue();
+	@Override
+	protected void execute() throws Exception {
+		String from = this.fromField.getValue();
+		String secret = this.secretField.getValue();
 
-        Integer credits = this.createConnector(from, secret).lookupCredits();
+		Integer credits = this.createConnector(from, secret).lookupCredits().getData();
 
-        if (credits != null) {
-            System.out.println("Remaining credits: " + credits);
-        } else {
-            System.out.println("Error fetching credits");
-            ;
-        }
-    }
+		if (credits != null) {
+			System.out.println("Remaining credits: " + credits);
+		} else {
+			System.out.println("Error fetching credits");
+		}
+	}
 }

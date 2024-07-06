@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending, and receiving Threema messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,17 +26,26 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool.messages;
 
-import ch.threema.apitool.DataUtils;
+import ch.threema.apitool.utils.DataUtils;
 import com.neilalexander.jnacl.NaCl;
 import org.apache.commons.io.EndianUtils;
 
 /**
  * An image message that can be sent/received with end-to-end encryption via Threema.
+ *
+ * @deprecated
  */
+@Deprecated
+@javax.annotation.Generated(value = "msgapi-sdk-codegen",
+				date = "2024-03-15T13:44:24.677063353+00:00")
 public class ImageMessage extends ThreemaMessage {
 
 	public static final int TYPE_CODE = 0x02;
@@ -39,6 +54,14 @@ public class ImageMessage extends ThreemaMessage {
 	private final byte[] nonce;
 
 
+	/**
+	 *
+	 * @param blobId
+	 * @param size
+	 * @param nonce
+	 * @deprecated
+	 */
+	@Deprecated
 	public ImageMessage(byte[] blobId, int size, byte[] nonce) {
 
 		this.blobId = blobId;
@@ -67,7 +90,7 @@ public class ImageMessage extends ThreemaMessage {
 
 	@Override
 	public String toString() {
-		return "blob " + DataUtils.byteArrayToHexString(this.blobId);
+		return "image{blob " + DataUtils.byteArrayToHexString(this.blobId) + "}";
 	}
 
 	@Override
@@ -80,7 +103,7 @@ public class ImageMessage extends ThreemaMessage {
 		EndianUtils.writeSwappedInteger(data, pos, this.size);
 		pos += 4;
 
-		System.arraycopy(this.nonce, 0, data, pos,  NaCl.NONCEBYTES);
+		System.arraycopy(this.nonce, 0, data, pos, NaCl.NONCEBYTES);
 		return data;
 
 	}

@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending, and receiving Threema messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,18 +26,42 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool.messages;
 
-import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Pattern;
+
+import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import org.apache.commons.io.EndianUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONArray;
+
+import ch.threema.apitool.utils.DataUtils;
+import ch.threema.apitool.types.QuotePart;
+import ch.threema.apitool.exceptions.BadMessageException;
+
+import ch.threema.apitool.serializers.TextMessageSerializer;
+
+import static ch.threema.apitool.utils.StringUtils.toIndentedString;
 
 /**
  * A text message that can be sent/received with end-to-end encryption via Threema.
  */
+@javax.annotation.Generated(value = "msgapi-sdk-codegen",
+				date = "2024-03-15T13:44:24.473407065+00:00")
 public class TextMessage extends ThreemaMessage {
-
 	public static final int TYPE_CODE = 0x01;
+
 
 	private final String text;
 
@@ -39,9 +69,43 @@ public class TextMessage extends ThreemaMessage {
 		this.text = text;
 	}
 
+	/**
+	 * The message text
+	 *
+	 * @return text
+	 **/
 	public String getText() {
 		return text;
 	}
+
+	/**
+	 * Whether or not the message is a quote
+	 *
+	 * @return Whether or not the message is a quote
+	 */
+	public boolean IsQuote() {
+		var pattern = Pattern.compile(DataUtils.QUOTE_PATTERN, Pattern.DOTALL);
+		return pattern.matcher(text).matches();
+	}
+
+	/**
+	 * Gets quoted message id if the message is a quote
+	 *
+	 * @return Quoted message id
+	 */
+	public String getQuotedMessageId() {
+		return DataUtils.extractQuote(text, QuotePart.QUOTED_MESSAGE_ID);
+	}
+
+	/**
+	 * Gets quote text if the message is a quote
+	 *
+	 * @return Quote text
+	 */
+	public String getQuoteText() {
+		return DataUtils.extractQuote(text, QuotePart.QUOTE_TEXT);
+	}
+
 
 	@Override
 	public int getTypeCode() {
@@ -49,16 +113,42 @@ public class TextMessage extends ThreemaMessage {
 	}
 
 	@Override
-	public String toString() {
-		return text;
+	public byte[] getData() throws BadMessageException {
+
+		return TextMessageSerializer.serialize(text);
+	}
+
+	public static TextMessage fromString(byte[] data, int realDataLength)
+					throws BadMessageException {
+		TextMessageSerializer.validate(data, realDataLength);
+		return TextMessageSerializer.deserialize(data, realDataLength);
+
 	}
 
 	@Override
-	public byte[] getData() {
-		try {
-			return text.getBytes("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return null;
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
 		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		return super.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(text, super.hashCode());
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("class TextMessage {\n");
+		sb.append("    text: ").append(toIndentedString(getText())).append("\n");
+
+		sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+		sb.append("}");
+		return sb.toString();
 	}
 }

@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending and receiving of Threema Messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +26,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool.console.commands;
@@ -27,7 +37,7 @@ package ch.threema.apitool.console.commands;
 import ch.threema.apitool.console.commands.fields.PrivateKeyField;
 import ch.threema.apitool.console.commands.fields.PublicKeyField;
 import ch.threema.apitool.CryptTool;
-import ch.threema.apitool.DataUtils;
+import ch.threema.apitool.utils.DataUtils;
 import ch.threema.apitool.results.EncryptResult;
 
 public class EncryptCommand extends Command {
@@ -35,8 +45,7 @@ public class EncryptCommand extends Command {
 	private final PublicKeyField publicKeyField;
 
 	public EncryptCommand() {
-		super("Encrypt",
-				"Encrypt standard input using the given sender private key and recipient public key. Prints two lines to standard output: first the nonce (hex), and then the box (hex).");
+		super("Encrypt", "Encrypt standard input using the given sender private key and recipient public key. Prints two lines to standard output: first the nonce (hex), and then the box (hex).");
 
 		this.privateKeyField = this.createPrivateKeyField("privateKey");
 		this.publicKeyField = this.createPublicKeyField("publicKey");

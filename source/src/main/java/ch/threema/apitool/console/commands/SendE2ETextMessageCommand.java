@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending and receiving of Threema Messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +26,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool.console.commands;
@@ -37,9 +47,9 @@ public class SendE2ETextMessageCommand extends Command {
 
 	public SendE2ETextMessageCommand() {
 		super("Send End-to-End Encrypted Text Message",
-				"Encrypt standard input and send the message to the given ID. 'from' is the API identity and 'secret' is the API secret. Prints the message ID on success.");
+						"Encrypt standard input and send the message to the given ID. 'gatewayId' is the API identity and 'secret' is the API secret. Prints the message ID on success.");
 		this.threemaId = this.createThreemaId("to");
-		this.fromField = this.createThreemaId("from");
+		this.fromField = this.createThreemaId("gatewayId");
 		this.secretField = this.createTextField("secret");
 		this.privateKeyField = this.createPrivateKeyField("privateKey");
 	}
@@ -54,7 +64,7 @@ public class SendE2ETextMessageCommand extends Command {
 		String text = this.readStream(System.in, "UTF-8").trim();
 
 		E2EHelper e2EHelper = new E2EHelper(this.createConnector(from, secret), privateKey);
-		String messageId = e2EHelper.sendTextMessage(to, text);
+		String messageId = e2EHelper.sendTextMessage(to, text).getData();
 		System.out.println("MessageId: " + messageId);
 	}
 }
