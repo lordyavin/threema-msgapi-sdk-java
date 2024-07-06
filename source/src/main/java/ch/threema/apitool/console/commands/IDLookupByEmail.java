@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending and receiving of Threema Messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +26,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool.console.commands;
@@ -35,10 +45,10 @@ public class IDLookupByEmail extends Command {
 
 	public IDLookupByEmail() {
 		super("ID Lookup By Email Address",
-				"Lookup the ID linked to the given email address (will be hashed locally).");
+						"Lookup the ID linked to the given email address (will be hashed locally).");
 
 		this.emailField = this.createTextField("email");
-		this.fromField = this.createThreemaId("from");
+		this.fromField = this.createThreemaId("gatewayId");
 		this.secretField = this.createTextField("secret");
 	}
 
@@ -49,7 +59,7 @@ public class IDLookupByEmail extends Command {
 		String secret = this.secretField.getValue();
 
 		APIConnector apiConnector = this.createConnector(from, secret);
-		String id = apiConnector.lookupEmail(email);
+		String id = apiConnector.lookupEmail(email).getData();
 		if (id != null) {
 			System.out.println(id);
 		}

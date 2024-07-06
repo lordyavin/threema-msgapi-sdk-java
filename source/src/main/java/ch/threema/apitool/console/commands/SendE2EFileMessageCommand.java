@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending and receiving of Threema Messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +26,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool.console.commands;
@@ -39,17 +49,18 @@ public class SendE2EFileMessageCommand extends Command {
 	private final PrivateKeyField privateKeyField;
 	private final FileField fileField;
 	private final FileField thumbnailField;
+	private final TextField caption;
 
 	public SendE2EFileMessageCommand() {
 		super("Send End-to-End Encrypted File Message",
-				"Encrypt the file (and thumbnail) and send a file message to the given ID. 'from' is the API identity and 'secret' is the API secret. Prints the message ID on success."
-		);
+						"Encrypt the file (and thumbnail) and send a file message to the given ID. 'gatewayId' is the API identity and 'secret' is the API secret. Prints the message ID on success.");
 		this.threemaId = this.createThreemaId("to");
-		this.fromField = this.createThreemaId("from");
+		this.fromField = this.createThreemaId("gatewayId");
 		this.secretField = this.createTextField("secret");
 		this.privateKeyField = this.createPrivateKeyField("privateKey");
 		this.fileField = this.createFileField("file");
 		this.thumbnailField = this.createFileField("thumbnail", false);
+		this.caption = this.createTextField("caption", false);
 
 	}
 
@@ -60,10 +71,11 @@ public class SendE2EFileMessageCommand extends Command {
 		String secret = this.secretField.getValue();
 		byte[] privateKey = this.privateKeyField.getValue();
 		File file = this.fileField.getValue();
-		File thumbnail =  this.thumbnailField.getValue();
+		File thumbnail = this.thumbnailField.getValue();
+		String caption = this.caption.getValue();
 
 		E2EHelper e2EHelper = new E2EHelper(this.createConnector(from, secret), privateKey);
-		String messageId = e2EHelper.sendFileMessage(to, file, thumbnail);
+		String messageId = e2EHelper.sendFileMessage(to, file, thumbnail, caption).getData();
 		System.out.println("MessageId: " + messageId);
 	}
 }

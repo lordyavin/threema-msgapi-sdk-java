@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending and receiving of Threema Messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,11 +26,17 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool;
 
 import ch.threema.apitool.exceptions.InvalidKeyException;
+import ch.threema.apitool.types.Key;
+import ch.threema.apitool.utils.DataUtils;
 import org.junit.Test;
 
 public class KeyTest {
@@ -41,19 +53,24 @@ public class KeyTest {
 
 	@Test
 	public void testDecodeKeyPrivate() throws Exception {
-		Key key = Key.decodeKey("private:1234567890123456789012345678901234567890123456789012345678901234");
+		Key key = Key.decodeKey(
+						"private:1234567890123456789012345678901234567890123456789012345678901234");
 		Assert.assertNotNull("key instance", key);
 
 		Assert.assertEquals(key.type, Key.KeyType.PRIVATE);
-		Assert.assertEquals(key.key, DataUtils.hexStringToByteArray("1234567890123456789012345678901234567890123456789012345678901234"));
+		Assert.assertEquals(key.key, DataUtils.hexStringToByteArray(
+						"1234567890123456789012345678901234567890123456789012345678901234"));
 	}
+
 	@Test
 	public void testDecodeKeyPublic() throws Exception {
-		Key key = Key.decodeKey("public:1234567890123456789012345678901234567890123456789012345678901234");
+		Key key = Key.decodeKey(
+						"public:1234567890123456789012345678901234567890123456789012345678901234");
 		Assert.assertNotNull("key instance", key);
 
 		Assert.assertEquals(key.type, Key.KeyType.PUBLIC);
-		Assert.assertEquals(key.key, DataUtils.hexStringToByteArray("1234567890123456789012345678901234567890123456789012345678901234"));
+		Assert.assertEquals(key.key, DataUtils.hexStringToByteArray(
+						"1234567890123456789012345678901234567890123456789012345678901234"));
 	}
 
 	@Test

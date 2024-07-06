@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending and receiving of Threema Messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +26,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool.console.commands;
@@ -35,10 +45,10 @@ public class SendSimpleMessageCommand extends Command {
 
 	public SendSimpleMessageCommand() {
 		super("Send Simple Message",
-				"Send a message from standard input with server-side encryption to the given ID. 'from' is the API identity and 'secret' is the API secret. Returns the message ID on success.");
+						"Send a message from standard input with server-side encryption to the given ID. 'gatewayId' is the API identity and 'secret' is the API secret. Returns the message ID on success.");
 
 		this.threemaId = this.createThreemaId("to");
-		this.fromField = this.createThreemaId("from");
+		this.fromField = this.createThreemaId("gatewayId");
 		this.secretField = this.createTextField("secret");
 	}
 
@@ -51,7 +61,7 @@ public class SendSimpleMessageCommand extends Command {
 		String text = readStream(System.in, "UTF-8").trim();
 
 		APIConnector apiConnector = this.createConnector(from, secret);
-		String messageId = apiConnector.sendTextMessageSimple(to, text);
+		String messageId = apiConnector.sendTextMessageSimple(to, text).getData();
 		System.out.println(messageId);
 	}
 }

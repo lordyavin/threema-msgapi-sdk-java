@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending and receiving of Threema Messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,40 +26,38 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
-package ch.threema.apitool;
+package ch.threema.apitool.types.voting;
 
-/**
- * Encapsulates the 8-byte message IDs that Threema uses.
- */
-public class MessageId {
+import java.util.HashMap;
+import java.util.Map;
 
-	public static final int MESSAGE_ID_LEN = 8;
+public enum VotingMode {
+	SINGLE_CHOICE(0), MULTIPLE_CHOICE(1);
 
-	private final byte[] messageId;
+	private final int value;
+	private static final Map<Integer, VotingMode> map = new HashMap<>();
 
-	public MessageId(byte[] messageId) {
-		if (messageId.length != MESSAGE_ID_LEN)
-			throw new IllegalArgumentException("Bad message ID length");
-
-		this.messageId = messageId;
+	VotingMode(int value) {
+		this.value = value;
 	}
 
-	public MessageId(byte[] data, int offset) {
-		if ((offset + MESSAGE_ID_LEN) > data.length)
-			throw new IllegalArgumentException("Bad message ID buffer length");
-
-		this.messageId = new byte[MESSAGE_ID_LEN];
-		System.arraycopy(data, offset, this.messageId, 0, MESSAGE_ID_LEN);
+	static {
+		for (VotingMode votingMode : VotingMode.values()) {
+			map.put(votingMode.value, votingMode);
+		}
 	}
 
-	public byte[] getMessageId() {
-		return messageId;
+	public static VotingMode valueOf(int votingMode) {
+		return map.get(votingMode);
 	}
 
-	@Override
-	public String toString() {
-		return DataUtils.byteArrayToHexString(messageId);
+	public int getValue() {
+		return value;
 	}
 }

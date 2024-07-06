@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending and receiving of Threema Messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +26,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool.console.commands;
@@ -43,24 +53,25 @@ abstract public class Command {
 	}
 
 	private void addField(Field f) {
-		if(f.isRequired()) {
+		if (f.isRequired()) {
 			int pos = this.fields.size();
-			//add after last required
-			for(int n = 0; n < this.fields.size(); n++) {
-				if(!this.fields.get(n).isRequired()) {
+			// add after last required
+			for (int n = 0; n < this.fields.size(); n++) {
+				if (!this.fields.get(n).isRequired()) {
 					pos = n;
 					break;
 				}
 			}
 			this.fields.add(pos, f);
-		}
-		else {
+		} else {
 			this.fields.add(f);
 		}
 	}
+
 	protected TextField createTextField(String key) {
 		return this.createTextField(key, true);
 	}
+
 	protected TextField createTextField(String key, boolean required) {
 		TextField field = new TextField(key, required);
 		this.addField(field);
@@ -127,7 +138,6 @@ abstract public class Command {
 		return field;
 	}
 
-
 	protected APIConnector createConnector(String gatewayId, String secret) {
 		return new APIConnector(gatewayId, secret, new PublicKeyStore() {
 			@Override
@@ -137,7 +147,7 @@ abstract public class Command {
 
 			@Override
 			protected void save(String threemaId, byte[] publicKey) {
-				//do nothing
+				// do nothing
 			}
 		});
 	}
@@ -159,16 +169,16 @@ abstract public class Command {
 
 	public final void run(String[] arguments) throws Exception {
 		int pos = 0;
-		for(Field f: this.fields) {
-			if(arguments.length > pos) {
+		for (Field f : this.fields) {
+			if (arguments.length > pos) {
 				f.setValue(arguments[pos]);
 			}
 			pos++;
 		}
 
-		//validate
-		for(Field f: this.fields) {
-			if(!f.isValid()) {
+		// validate
+		for (Field f : this.fields) {
+			if (!f.isValid()) {
 				return;
 			}
 		}
@@ -182,11 +192,9 @@ abstract public class Command {
 
 	public final String getUsageArguments() {
 		StringBuilder usage = new StringBuilder();
-		for(Field f: this.fields) {
-			usage.append(" ")
-					.append(f.isRequired() ? "<" : "[")
-					.append(f.getKey())
-					.append(f.isRequired() ? ">" : "]");
+		for (Field f : this.fields) {
+			usage.append(" ").append(f.isRequired() ? "<" : "[").append(f.getKey())
+							.append(f.isRequired() ? ">" : "]");
 		}
 		return usage.toString().trim();
 	}

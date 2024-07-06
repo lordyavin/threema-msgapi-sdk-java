@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending and receiving of Threema Messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +26,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool.results;
@@ -79,8 +89,8 @@ public class CapabilityResult {
 	}
 
 	private boolean can(String key) {
-		for(String k: this.capabilities) {
-			if(k.equals(key)) {
+		for (String k : this.capabilities) {
+			if (k.equals(key)) {
 				return true;
 			}
 		}
@@ -91,8 +101,8 @@ public class CapabilityResult {
 	public String toString() {
 		StringBuilder b = new StringBuilder();
 		b.append(this.key).append(": ");
-		for(int n = 0; n < this.capabilities.length; n++) {
-			if(n > 0) {
+		for (int n = 0; n < this.capabilities.length; n++) {
+			if (n > 0) {
 				b.append(",");
 			}
 			b.append(this.capabilities[n]);

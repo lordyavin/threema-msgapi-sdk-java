@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending, and receiving Threema messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,132 +26,286 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool.messages;
 
-import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Pattern;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import org.apache.commons.io.EndianUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONArray;
 
-import ch.threema.apitool.DataUtils;
+import ch.threema.apitool.utils.DataUtils;
+import ch.threema.apitool.types.QuotePart;
 import ch.threema.apitool.exceptions.BadMessageException;
 
+import ch.threema.apitool.types.MessageId;
+import ch.threema.apitool.types.GroupId;
+import ch.threema.apitool.types.voting.*;
+import ch.threema.apitool.types.*;
+import ch.threema.apitool.serializers.FileMessageSerializer;
+
+import static ch.threema.apitool.utils.StringUtils.toIndentedString;
+
 /**
- * A file message that can be sent/received with end-to-end encryption via Threema.
+ * A File Message
  */
+@javax.annotation.Generated(value = "msgapi-sdk-codegen",
+				date = "2024-03-15T13:44:24.475245996+00:00")
 public class FileMessage extends ThreemaMessage {
-    private final static String KEY_BLOB_ID = "b";
-    private final static String KEY_THUMBNAIL_BLOB_ID = "t";
-    private final static String KEY_ENCRYPTION_KEY = "k";
-    private final static String KEY_MIME_TYPE = "m";
-    private final static String KEY_FILE_NAME = "n";
-    private final static String KEY_FILE_SIZE = "s";
-    private final static String KEY_TYPE = "i";
+	public static final int TYPE_CODE = 0x17;
 
-    public static final int TYPE_CODE = 0x17;
+	private final static String KEY_BLOB_ID = "b";
+	private final static String KEY_THUMBNAIL_BLOB_ID = "t";
+	private final static String KEY_THUMBNAIL_MEDIA_TYPE = "p";
+	private final static String KEY_ENCRYPTION_KEY = "k";
+	private final static String KEY_MIME_TYPE = "m";
+	private final static String KEY_FILE_NAME = "n";
+	private final static String KEY_SIZE = "s";
+	private final static String KEY_CAPTION = "d";
+	private final static String KEY_RENDERING_TYPE = "j";
+	private final static String KEY_CORRELATION_ID = "c";
+	private final static String KEY_METADATA = "x";
 
-    private final byte[] blobId;
-    private final byte[] encryptionKey;
-    private final String mimeType;
-    private final String fileName;
-    private final int fileSize;
-    private final byte[] thumbnailBlobId;
+	private final byte[] blobId;
+	private final byte[] thumbnailBlobId;
+	private final String thumbnailMediaType;
+	private final byte[] encryptionKey;
+	private final String mimeType;
+	private final String fileName;
+	private final int size;
+	private final String caption;
+	private final FileRenderingType renderingType;
+	private final String correlationId;
+	private final Map<String, Object> metadata;
 
-    public FileMessage(byte[] blobId, byte[] encryptionKey, String mimeType, String fileName, int fileSize,
-            byte[] thumbnailBlobId) {
-        this.blobId = blobId;
-        this.encryptionKey = encryptionKey;
-        this.mimeType = mimeType;
-        this.fileName = fileName;
-        this.fileSize = fileSize;
-        this.thumbnailBlobId = thumbnailBlobId;
-    }
+	public FileMessage(byte[] blobId, byte[] thumbnailBlobId, String thumbnailMediaType,
+					byte[] encryptionKey, String mimeType, String fileName, int size,
+					String caption, FileRenderingType renderingType, String correlationId,
+					Map<String, Object> metadata) {
+		this.blobId = blobId;
+		this.thumbnailBlobId = thumbnailBlobId;
+		this.thumbnailMediaType = thumbnailMediaType;
+		this.encryptionKey = encryptionKey;
+		this.mimeType = mimeType;
+		this.fileName = fileName;
+		this.size = size;
+		this.caption = caption;
+		this.renderingType = renderingType;
+		this.correlationId = correlationId;
+		this.metadata = metadata;
+	}
 
-    public byte[] getBlobId() {
-        return this.blobId;
-    }
+	/**
+	 * The blob ID
+	 *
+	 * @return blobId
+	 **/
+	public byte[] getBlobId() {
+		return blobId;
+	}
 
-    public byte[] getEncryptionKey() {
-        return this.encryptionKey;
-    }
 
-    public String getMimeType() {
-        return this.mimeType;
-    }
+	/**
+	 * The thumbnail blob ID
+	 *
+	 * @return thumbnailBlobId
+	 **/
+	public byte[] getThumbnailBlobId() {
+		return thumbnailBlobId;
+	}
 
-    public String getFileName() {
-        return this.fileName;
-    }
 
-    public int getFileSize() {
-        return this.fileSize;
-    }
+	/**
+	 * The thumbnail media type
+	 *
+	 * @return thumbnailMediaType
+	 **/
+	public String getThumbnailMediaType() {
+		return thumbnailMediaType;
+	}
 
-    public byte[] getThumbnailBlobId() {
-        return this.thumbnailBlobId;
-    }
 
-    @Override
-    public int getTypeCode() {
-        return TYPE_CODE;
-    }
+	/**
+	 * The encryption key
+	 *
+	 * @return encryptionKey
+	 **/
+	public byte[] getEncryptionKey() {
+		return encryptionKey;
+	}
 
-    @Override
-    public String toString() {
-        return "file message " + this.fileName;
-    }
 
-    @Override
-    public byte[] getData() throws BadMessageException {
-        JsonObject o = new JsonObject();
-        try {
-            o.addProperty(KEY_BLOB_ID, DataUtils.byteArrayToHexString(this.blobId));
-            o.addProperty(KEY_THUMBNAIL_BLOB_ID,
-                    this.thumbnailBlobId != null ? DataUtils.byteArrayToHexString(this.thumbnailBlobId) : null);
-            o.addProperty(KEY_ENCRYPTION_KEY, DataUtils.byteArrayToHexString(this.encryptionKey));
-            o.addProperty(KEY_MIME_TYPE, this.mimeType);
-            o.addProperty(KEY_FILE_NAME, this.fileName);
-            o.addProperty(KEY_FILE_SIZE, this.fileSize);
-            o.addProperty(KEY_TYPE, 0);
-        } catch (Exception e) {
-            throw new BadMessageException();
-        }
+	/**
+	 * The mime type
+	 *
+	 * @return mimeType
+	 **/
+	public String getMimeType() {
+		return mimeType;
+	}
 
-        try {
-            return o.toString().getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            return null;
-        }
-    }
 
-    public static FileMessage fromString(String json) throws BadMessageException {
-        try {
-            JsonObject o = new Gson().fromJson(json, JsonObject.class);
-            byte[] encryptionKey = DataUtils.hexStringToByteArray(o.get(KEY_ENCRYPTION_KEY).getAsString());
-            String mimeType = o.get(KEY_MIME_TYPE).getAsString();
-            int fileSize = o.get(KEY_FILE_SIZE).getAsInt();
-            byte[] blobId = DataUtils.hexStringToByteArray(o.get(KEY_BLOB_ID).getAsString());
+	/**
+	 * The filename
+	 *
+	 * @return fileName
+	 **/
+	public String getFilename() {
+		return fileName;
+	}
 
-            String fileName;
-            byte[] thumbnailBlobId = null;
 
-            // optional field
-            if (o.has(KEY_THUMBNAIL_BLOB_ID)) {
-                thumbnailBlobId = DataUtils.hexStringToByteArray(o.get(KEY_THUMBNAIL_BLOB_ID).getAsString());
-            }
+	/**
+	 * The file size
+	 *
+	 * @return size
+	 **/
+	public int getSize() {
+		return size;
+	}
 
-            if (o.has(KEY_FILE_NAME)) {
-                fileName = o.get(KEY_FILE_NAME).getAsString();
-            } else {
-                fileName = "unnamed";
-            }
 
-            return new FileMessage(blobId, encryptionKey, mimeType, fileName, fileSize, thumbnailBlobId);
-        } catch (JsonSyntaxException e) {
-            throw new BadMessageException();
-        }
-    }
+	/**
+	 * The file caption
+	 *
+	 * @return caption
+	 **/
+	public String getCaption() {
+		return caption;
+	}
+
+
+	/**
+	 * The rendering type
+	 *
+	 * @return renderingType
+	 **/
+	public FileRenderingType getRenderingType() {
+		return renderingType;
+	}
+
+
+	/**
+	 * The correlation identifier
+	 *
+	 * @return correlationId
+	 **/
+	public String getCorrelationId() {
+		return correlationId;
+	}
+
+
+	/**
+	 * The metadata
+	 *
+	 * @return metadata
+	 **/
+	public Map<String, Object> getMetadata() {
+		return metadata;
+	}
+
+
+
+	@Override
+	public int getTypeCode() {
+		return TYPE_CODE;
+	}
+
+	@Override
+	public byte[] getData() throws BadMessageException {
+		JSONObject o = new JSONObject();
+		try {
+
+			o.put(KEY_BLOB_ID, DataUtils.byteArrayToHexString(this.blobId));
+			if (this.thumbnailBlobId != null)
+				o.put(KEY_THUMBNAIL_BLOB_ID, DataUtils.byteArrayToHexString(this.thumbnailBlobId));
+			if (this.thumbnailMediaType != null)
+				o.put(KEY_THUMBNAIL_MEDIA_TYPE, this.thumbnailMediaType);
+			o.put(KEY_ENCRYPTION_KEY, DataUtils.byteArrayToHexString(this.encryptionKey));
+			o.put(KEY_MIME_TYPE, this.mimeType);
+			if (this.fileName != null)
+				o.put(KEY_FILE_NAME, this.fileName);
+			o.put(KEY_SIZE, this.size);
+			if (this.caption != null)
+				o.put(KEY_CAPTION, this.caption);
+			if (this.renderingType != null)
+				o.put(KEY_RENDERING_TYPE, this.renderingType.getValue());
+			if (this.correlationId != null)
+				o.put(KEY_CORRELATION_ID, this.correlationId);
+			if (this.metadata != null)
+				o.put(KEY_METADATA, this.metadata);
+		} catch (Exception e) {
+			throw new BadMessageException();
+		}
+
+		return o.toString().getBytes(StandardCharsets.UTF_8);
+
+	}
+
+	public static FileMessage fromString(byte[] data, int realDataLength)
+					throws BadMessageException {
+		FileMessageSerializer.validate(data, realDataLength);
+		return FileMessageSerializer.deserialize(data, realDataLength);
+
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		return super.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(Arrays.hashCode(blobId), Arrays.hashCode(thumbnailBlobId),
+						thumbnailMediaType, Arrays.hashCode(encryptionKey), mimeType, fileName,
+						size, caption, renderingType, correlationId, metadata, super.hashCode());
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("class FileMessage {\n");
+		sb.append("    blobId: ")
+						.append(toIndentedString(DataUtils.byteArrayToHexString(getBlobId())))
+						.append("\n");
+		sb.append("    thumbnailBlobId: ")
+						.append(toIndentedString(
+										DataUtils.byteArrayToHexString(getThumbnailBlobId())))
+						.append("\n");
+		sb.append("    thumbnailMediaType: ").append(toIndentedString(getThumbnailMediaType()))
+						.append("\n");
+		sb.append("    encryptionKey: ")
+						.append(toIndentedString(
+										DataUtils.byteArrayToHexString(getEncryptionKey())))
+						.append("\n");
+		sb.append("    mimeType: ").append(toIndentedString(getMimeType())).append("\n");
+		sb.append("    fileName: ").append(toIndentedString(getFilename())).append("\n");
+		sb.append("    size: ").append(toIndentedString(getSize())).append("\n");
+		sb.append("    caption: ").append(toIndentedString(getCaption())).append("\n");
+		sb.append("    renderingType: ").append(toIndentedString(getRenderingType())).append("\n");
+		sb.append("    correlationId: ").append(toIndentedString(getCorrelationId())).append("\n");
+		sb.append("    metadata: ").append(toIndentedString(getMetadata())).append("\n");
+
+		sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+		sb.append("}");
+		return sb.toString();
+	}
 }

@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending and receiving of Threema Messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +26,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool.console.commands;
@@ -34,11 +44,10 @@ public class CapabilityCommand extends Command {
 	private final TextField secretField;
 
 	public CapabilityCommand() {
-		super("Fetch Capability",
-				"Fetch the capability of a Threema ID");
+		super("Fetch Capability", "Fetch the capability of a Threema ID");
 
 		this.threemaIdField = this.createThreemaId("id");
-		this.fromField = this.createThreemaId("from");
+		this.fromField = this.createThreemaId("gatewayId");
 		this.secretField = this.createTextField("secret");
 	}
 
@@ -48,8 +57,8 @@ public class CapabilityCommand extends Command {
 		String from = this.fromField.getValue();
 		String secret = this.secretField.getValue();
 
-		CapabilityResult capabilities = this.createConnector(from, secret)
-				.lookupKeyCapability(threemaId);
+		CapabilityResult capabilities =
+						this.createConnector(from, secret).lookupKeyCapability(threemaId);
 
 		System.out.println(capabilities);
 	}

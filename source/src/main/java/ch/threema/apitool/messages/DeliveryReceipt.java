@@ -1,8 +1,14 @@
 /*
- * $Id$
+ *  _____ _
+ * |_   _| |_  _ _ ___ ___ _ __  __ _
+ *   | | | ' \| '_/ -_) -_) '  \/ _` |_
+ *   |_| |_||_|_| \___\___|_|_|_\__,_(_)
+ *
+ * Threema Gateway Java SDK
+ * This SDK allows for preparing, sending, and receiving Threema messages via Threema Gateway.
  *
  * The MIT License (MIT)
- * Copyright (c) 2015 Threema GmbH
+ * Copyright (c) 2015-2024 Threema GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,71 +26,93 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
+ *
+ *
+ *
+ *
  */
 
 package ch.threema.apitool.messages;
 
-import ch.threema.apitool.MessageId;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Pattern;
 
-import java.util.List;
+import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import org.apache.commons.io.EndianUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONArray;
+
+import ch.threema.apitool.utils.DataUtils;
+import ch.threema.apitool.types.QuotePart;
+import ch.threema.apitool.exceptions.BadMessageException;
+
+import ch.threema.apitool.types.MessageId;
+import ch.threema.apitool.types.GroupId;
+import ch.threema.apitool.types.voting.*;
+import ch.threema.apitool.types.*;
+import ch.threema.apitool.serializers.DeliveryReceiptSerializer;
+
+import static ch.threema.apitool.utils.StringUtils.toIndentedString;
 
 /**
- * A delivery receipt message that can be sent/received with end-to-end encryption via Threema.
- * Each delivery receipt message confirms the receipt of one or multiple regular messages.
+ * A delivery receipt message that can be sent/received with end-to-end encryption via Threema. Each
+ * delivery receipt message confirms the receipt of one or multiple regular messages.
  */
+@javax.annotation.Generated(value = "msgapi-sdk-codegen",
+				date = "2024-03-15T14:13:28.152752276+00:00")
 public class DeliveryReceipt extends ThreemaMessage {
-
 	public static final int TYPE_CODE = 0x80;
 
-	private final Type receiptType;
+
+	private final DeliveryReceipt.Type receiptType;
 	private final List<MessageId> ackedMessageIds;
 
-	public DeliveryReceipt(Type receiptType, List<MessageId> ackedMessageIds) {
+	public DeliveryReceipt(DeliveryReceipt.Type receiptType, List<MessageId> ackedMessageIds) {
 		this.receiptType = receiptType;
 		this.ackedMessageIds = ackedMessageIds;
 	}
 
-	public Type getReceiptType() {
+	/**
+	 * The message receipt type
+	 *
+	 * @return receiptType
+	 **/
+	public DeliveryReceipt.Type getReceiptType() {
 		return receiptType;
 	}
 
+	/**
+	 * The acked message ids
+	 *
+	 * @return ackedMessageIds
+	 **/
 	public List<MessageId> getAckedMessageIds() {
 		return ackedMessageIds;
 	}
+
+
 
 	@Override
 	public int getTypeCode() {
 		return TYPE_CODE;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder("Delivery receipt (");
-		sb.append(receiptType);
-		sb.append("): ");
-		int i = 0;
-		for (MessageId messageId : ackedMessageIds) {
-			if (i != 0)
-				sb.append(", ");
-			sb.append(messageId);
-			i++;
-		}
-		return sb.toString();
-	}
-
 	/**
 	 * A delivery receipt type. The following types are defined:
 	 *
-	 * <ul>
-	 *     <li>RECEIVED: the message has been received and decrypted on the recipient's device</li>
-	 *     <li>READ: the message has been shown to the user in the chat view
-	 *         (note that this status can be disabled)</li>
-	 *     <li>USER_ACK: the user has explicitly acknowledged the message (usually by
-	 *         long-pressing it and choosing the "acknowledge" option)</li>
-	 * </ul>
+	 * RECEIVED: the message has been received and decrypted on the recipient's device
+	 * READ: the message has been shown to the user in the chat view (note that this status can be
+	 * disabled)
+	 * USER_ACK: the user has explicitly acknowledged the message (usually by
+	 * long-pressing it and choosing the "acknowledge" option)
+	 * USER_DEC: the user has explicitly declined the message
 	 */
 	public enum Type {
-		RECEIVED(1), READ(2), USER_ACK(3);
+		RECEIVED(1), READ(2), USER_ACK(3), USER_DEC(4);
 
 		private final int code;
 
@@ -98,16 +126,54 @@ public class DeliveryReceipt extends ThreemaMessage {
 
 		public static Type get(int code) {
 			for (Type t : values()) {
-				if (t.code == code)
+				if (t.code == code) {
 					return t;
+				}
 			}
 			return null;
 		}
 	}
 
 	@Override
-	public byte[] getData() {
-		//Not implemented yet
-		return new byte[0];
+	public byte[] getData() throws BadMessageException {
+
+		return DeliveryReceiptSerializer.serialize(receiptType, ackedMessageIds);
+	}
+
+	public static DeliveryReceipt fromString(byte[] data, int realDataLength)
+					throws BadMessageException {
+		DeliveryReceiptSerializer.validate(data, realDataLength);
+		return DeliveryReceiptSerializer.deserialize(data, realDataLength);
+
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		return super.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(receiptType, Arrays.hashCode(ackedMessageIds.toArray()),
+						super.hashCode());
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("class DeliveryReceipt {\n");
+		sb.append("    receiptType: ").append(toIndentedString(getReceiptType())).append("\n");
+		sb.append("    ackedMessageIds: ").append(toIndentedString(getAckedMessageIds()))
+						.append("\n");
+
+		sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+		sb.append("}");
+		return sb.toString();
 	}
 }
